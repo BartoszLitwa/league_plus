@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "466492408904",
+    "firebase_url": "https://leagueplus-a7c70.firebaseio.com",
+    "project_id": "leagueplus-a7c70",
+    "storage_bucket": "leagueplus-a7c70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466492408904:android:dc436c4daa238ab824847d",
+        "android_client_info": {
+          "package_name": "com.CRNYY.league_plus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "466492408904-06heksllct6li241k221gp70jgmijmpp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWXDwrh1IstZQXxTiEPUOupCHKEFztOiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "466492408904-06heksllct6li241k221gp70jgmijmpp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
