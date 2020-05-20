@@ -16,12 +16,15 @@ class FavourtieTile extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             radius: 25,
-            backgroundImage: NetworkImage(LeagueService.getSummonerIcon(sum.profileIconId)),
+            backgroundImage: NetworkImage(LeagueService.getSummonerIcon(sum.profileIconId), scale: 0.1),
           ),
           title:  Text(sum.name),
           subtitle: Row(
             children: <Widget>[
-              Image.asset('assets/lol_ranks/Emblem_Gold.png'),
+              SizedBox(
+                height: 20,
+                child: Image.asset('assets/lol_ranks/Emblem_Gold.png'),
+              ),
               Text('Gold | 1'),
             ],
           ),

@@ -1,53 +1,42 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:league_plus/models/user.dart';
 import 'package:league_plus/services/league_classes/classes.dart';
 
 class DatabaseService {
-  final String uid;
-  final CollectionReference favouriteCollection = Firestore.instance.collection('favourite');
+  static String uid;
 
-  DatabaseService({this.uid});
+  static final CollectionReference favouriteCollection = Firestore.instance.collection('favourite');
 
-  Stream<List<Summoner>> get summoners {
-    return favouriteCollection.document(uid).snapshots().map(_summonersFromSnapshot);
+  static Stream<DocumentSnapshot> get user {
+    return favouriteCollection.document(uid).snapshots();
   }
 
-  Future updateUserData(Summoner summoner) async {
-    return await favouriteCollection.document(uid).setData({
-      'summoners': summoner.toJson(),
-    }, merge: true);
+  static Future setUserData(Summoner summoner) async {
+    await favouriteCollection.document(uid).setData({
+      'summoners': {},
+    }, merge: false);
   }
 
-  // UserData from snapshot
-  User _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    return User(
-      uid: uid,
-      summoners: snapshot.data['summoners'],
-    );
+  static Future updateUserData(Summoner summoner) async {
+    return favouriteCollection.document(uid).updateData({
+      'summoners': FieldValue.arrayUnion([summoner.toJson()])
+    });
   }
 
-  List<Summoner> _summonersFromSnapshot(DocumentSnapshot snapshot) {
-    return List<Summoner>(snapshot.data['summoners']);
+  static List<Summoner> _summonersFromSnapshot(DocumentSnapshot snapshot) {
+    if(snapshot.data == null || snapshot?.data['summoners'] == null)
+     return null;
+
+    try {
+      return snapshot?.data['summoners'].map<Summoner>((doc) {
+        var map = Map<String, dynamic>.from(doc);
+        return Summoner.fromJson(map);
+      }).toList();
+    }catch(ex) {
+      return null;
+    }
   }
 
-  // Get user doc stream
-  Stream<User> get userData {
-    return favouriteCollection.document(uid).snapshots().map(_userDataFromSnapshot);
-  } 
-
-  //// Brew list from snapshot
-  //List<Brew> _brewListFromSnapshot(QuerySnapshot snapshot) {
-  //  return snapshot.documents.map((doc) => Brew(
-  //    name: doc.data['name'] ?? '',
-  //    sugars: doc.data['sugars'] ?? '0',
-  //    strength: doc.data['strength'] ?? 0
-  //  )).toList();
-  //} 
-  //
-  //// Get brews stream
-  //Stream<List<Brew>> get brews {
-  //  return brewCollection.snapshots().map(_brewListFromSnapshot);
-  //}
+  static Future<List<Summoner>> favouriteSummoners() async {
+    return _summonersFromSnapshot(await favouriteCollection.document(uid).get());
+  }
 }

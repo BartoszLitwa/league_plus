@@ -14,7 +14,8 @@ class AuthService {
     try {
       AuthResult result = await _auth.signInAnonymously();
 
-      await DatabaseService(uid: result.user.uid).updateUserData(null);
+      DatabaseService.uid = result.user.uid;
+      await DatabaseService.setUserData(null);
 
       return _userFromFirebaseUser(result.user);
     }
@@ -28,6 +29,8 @@ class AuthService {
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+      DatabaseService.uid = result.user.uid;
       
       return _userFromFirebaseUser(result.user);
     } catch (e) {
@@ -42,7 +45,8 @@ class AuthService {
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
 
       // Create a new document for this user with his uid
-      await DatabaseService(uid: result.user.uid).updateUserData(null);
+      DatabaseService.uid = result.user.uid;
+      await DatabaseService.setUserData(null);
 
       return _userFromFirebaseUser(result.user);
     } catch (e) {

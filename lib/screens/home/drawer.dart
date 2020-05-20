@@ -5,7 +5,6 @@ import 'package:league_plus/constants/url_routes.dart';
 import 'package:league_plus/services/FireStore/auth.dart';
 import 'package:league_plus/services/FireStore/database.dart';
 import 'package:league_plus/services/league_api.dart';
-import 'package:league_plus/services/league_classes/classes.dart';
 
 class MainDrawer extends StatefulWidget {
   final Color white;
@@ -41,7 +40,7 @@ class _MainDrawerState extends State<MainDrawer> {
               leading: Icon(Icons.account_circle, color: widget.white),
               title: Text('Profile', style: defaultStyle),
               onTap: () async {
-                await DatabaseService().updateUserData(await LeagueService.getSummoner(Regions.eune, 'Synn3K'));
+                await DatabaseService.updateUserData(await LeagueService.getSummoner(Regions.eune, 'Synn3K'));
               },
             ),
 
@@ -49,7 +48,7 @@ class _MainDrawerState extends State<MainDrawer> {
               leading: Icon(Icons.games, color: widget.white),
               title: Text('TFT', style: defaultStyle),
               onTap: () async {
-                await DatabaseService().updateUserData(await LeagueService.getSummoner(Regions.eune, 'LazyTurtle345'));
+                await DatabaseService.updateUserData(await LeagueService.getSummoner(Regions.eune, 'LazyTurtle345'));
               },
             ),
 
@@ -63,6 +62,30 @@ class _MainDrawerState extends State<MainDrawer> {
                 await AuthService().signInAnon();
                 EasyLoading.showSuccess('Successfuly loaded');          
               },          
+            ),
+
+            ListTile(
+              leading: Icon(Icons.games, color: widget.white),
+              title: Text('sign in', style: defaultStyle),
+              onTap: () async {
+                await AuthService().signInWithEmailAndPassword('bartosz.maciej.litwa@gmail.com', 'test1234');
+              },
+            ),
+
+            ListTile(
+              leading: Icon(Icons.games, color: widget.white),
+              title: Text('register', style: defaultStyle),
+              onTap: () async {
+                await AuthService().registerWithEmailAndPassword('bartosz.maciej.litwa@gmail.com', 'test1234');
+              },
+            ),
+
+            ListTile(
+              leading: Icon(Icons.help, color: widget.white),
+              title: Text('test', style: defaultStyle),
+              onTap: () async {
+                DatabaseService.favouriteSummoners();
+              },
             ),
           ],
         ),

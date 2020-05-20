@@ -14,7 +14,7 @@ class Summoner {
      profileIconId: response['profileIconId'], revisionDate: response['revisionDate'], summonerLevel: response['summonerLevel']);
   }
 
-  fromJson(Map<String, dynamic> json) {
+  Summoner.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     accountId = json['accountId'];
     puuid = json['puuid'];
@@ -22,7 +22,6 @@ class Summoner {
     profileIconId = json['profileIconId'];
     revisionDate = json['revisionDate'];
     summonerLevel = json['summonerLevel'];
-    return this;
   }
 
   Map<String, dynamic> toJson() => {
