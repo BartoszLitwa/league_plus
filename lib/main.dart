@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:league_plus/models/user.dart';
+import 'package:league_plus/screens/search_summoner/search_home.dart';
 import 'package:league_plus/screens/wrapper.dart';
-import 'package:league_plus/services/FireStore/auth.dart';
-import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(App());
 
-class MyApp extends StatelessWidget {
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User>.value(
-      value: AuthService().user,
-      child: FlutterEasyLoading(
-          child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Wrapper(),
-          ),
-      )
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/home',
+      routes: {
+        '/home': (context) => Wrapper(),
+        '/searchSummoner': (context) => SearchSummoner(),
+      },
     );
   }
 }

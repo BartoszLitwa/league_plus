@@ -35,7 +35,7 @@ class SummonerUrl {
     return '${Regions.getApiUrl(reg)}/lol/summoner/v4/summoners/by-puuid/$puuid';
   }
 
-  static String getSummonerByID(String reg, String id) {
+  static String getSummonerBySummonerID(String reg, String id) {
     return '${Regions.getApiUrl(reg)}/lol/summoner/v4/summoners/$id';
   }
 }
@@ -45,16 +45,24 @@ class LeagueUrl {
     return '${Regions.getApiUrl(reg)}/lol/league/v4/challengerleagues/by-queue/$queue';
   }
 
+  static String getGrandmasterLeague(String reg, String queue) {
+    return '${Regions.getApiUrl(reg)}/lol/league/v4/grandmasterleagues/by-queue/$queue';
+  }
+
+  static String getMasterLeague(String reg, String queue) {
+    return '${Regions.getApiUrl(reg)}/lol/league/v4/masterleagues/by-queue/$queue';
+  }
+
   static String getSummonerLeagues(String reg, String summonerId) {
     return '${Regions.getApiUrl(reg)}/lol/league/v4/entries/by-summoner/$summonerId';
   }
 
-  static String getSummonerByPuuid(String reg, String puuid) {
-    return '${Regions.getApiUrl(reg)}/lol/summoner/v4/summoners/by-puuid/$puuid';
+  static String getAllLeaguesEntries(String reg, String queue, String tier, String division) {
+    return '${Regions.getApiUrl(reg)}/lol/league/v4/entries/$queue/$tier/$division';
   }
 
-  static String getSummonerByID(String reg, String id) {
-    return '${Regions.getApiUrl(reg)}/lol/summoner/v4/summoners/$id';
+  static String getLeagueByID(String reg, String leagueId) {
+    return '${Regions.getApiUrl(reg)}/lol/league/v4/leagues/$leagueId';
   }
 }
 

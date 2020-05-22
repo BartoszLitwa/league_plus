@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:league_plus/services/league_classes/classes.dart';
+import 'package:league_plus/services/league/classes.dart';
 import 'package:league_plus/services/local_data/file_service.dart';
 
 class DataService {

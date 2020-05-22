@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:league_plus/constants/styles.dart';
 import 'package:league_plus/constants/url_routes.dart';
 import 'package:league_plus/services/FireStore/auth.dart';
 import 'package:league_plus/services/FireStore/database.dart';
-import 'package:league_plus/services/league_api.dart';
+import 'package:league_plus/services/league/league_api.dart';
+import 'package:league_plus/services/league/classes.dart';
 
 class MainDrawer extends StatefulWidget {
   final Color white;
@@ -40,7 +40,8 @@ class _MainDrawerState extends State<MainDrawer> {
               leading: Icon(Icons.account_circle, color: widget.white),
               title: Text('Profile', style: defaultStyle),
               onTap: () async {
-                await DatabaseService.updateUserData(await LeagueService.getSummoner(Regions.eune, 'Synn3K'));
+                var sum = await LeagueService.getSummonerByName(Regions.eune, 'Synn3K');
+                await DatabaseService.updateSummoners(FavouriteSummoner(summonerID: sum.id, region: Regions.eune));
               },
             ),
 
@@ -48,7 +49,8 @@ class _MainDrawerState extends State<MainDrawer> {
               leading: Icon(Icons.games, color: widget.white),
               title: Text('TFT', style: defaultStyle),
               onTap: () async {
-                await DatabaseService.updateUserData(await LeagueService.getSummoner(Regions.eune, 'LazyTurtle345'));
+                var sum = await LeagueService.getSummonerByName(Regions.eune, 'LazyTurtle345');
+                await DatabaseService.updateSummoners(FavouriteSummoner(summonerID: sum.id, region: Regions.eune));
               },
             ),
 
@@ -57,10 +59,8 @@ class _MainDrawerState extends State<MainDrawer> {
               title: Text('Settings', style: defaultStyle),
               onTap: () async {
                 print('Logging in');
-                EasyLoading.showInfo('Loading');
                 await AuthService().signOut();
                 await AuthService().signInAnon();
-                EasyLoading.showSuccess('Successfuly loaded');          
               },          
             ),
 

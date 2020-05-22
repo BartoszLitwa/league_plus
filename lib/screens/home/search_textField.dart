@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:league_plus/constants/url_routes.dart';
-import 'package:league_plus/services/league_api.dart';
-import 'package:league_plus/services/league_classes/classes.dart';
+import 'package:league_plus/services/league/league_api.dart';
+import 'package:league_plus/services/league/classes.dart';
 
 class SearchTextField extends StatefulWidget {
   final Color white;
@@ -59,7 +59,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
     if(val.isEmpty)
       return;
 
-    Summoner sum = await LeagueService.getSummoner(Regions.eune, val);
+    Summoner sum = await LeagueService.getSummonerByName(Regions.eune, val);
 
     var text = await LeagueService.getSummonersChampion(Regions.eune, sum.id);
 

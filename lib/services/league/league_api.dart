@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:league_plus/constants/url_routes.dart';
-import 'package:league_plus/services/league_classes/classes.dart';
+import 'package:league_plus/services/league/classes.dart';
 
 class LeagueService {
   static final String _apiKey = 'RGAPI-ba289589-17c6-47ab-a8d2-97ff259d704b';
@@ -26,15 +26,30 @@ class LeagueService {
     }
   }
 
-  static Future<Summoner> getSummoner(String reg, String summonerName) async {
-    return Summoner.responseToSummoner(await _getFromUrl(SummonerUrl.getSummonerByName(reg, summonerName)));
+  static Future<Summoner> getSummonerByName(String reg, String summonerName) async {
+    return Summoner.fromJson(await _getFromUrl(SummonerUrl.getSummonerByName(reg, summonerName)));
+  }
+
+  static Future<Summoner> getSummonerByAccountID(String reg, String accountID) async {
+    return Summoner.fromJson(await _getFromUrl(SummonerUrl.getSummonerByAccount(reg, accountID)));
+  }
+
+  static Future<Summoner> getSummonerBySummonerID(String reg, String summonerID) async {
+    return Summoner.fromJson(await _getFromUrl(SummonerUrl.getSummonerBySummonerID(reg, summonerID)));
   }
 
   static Future<List<Champion>> getSummonersChampion(String reg, String summonerId) async {
     var response = await _getFromUrl(ChampionMasteryUrl.getSummonerMastery(reg, summonerId));
-    List<Champion> champs = (response as List).map((c) => Champion.responseToChampion(c)).toList();
+    List<Champion> champs = (response as List).map<Champion>((c) => Champion.fromJson(c)).toList();
 
     return champs;
+  }
+
+  static Future<List<League>> getSummonersLeagues(String reg, String summonerId) async {
+    var response = await _getFromUrl(LeagueUrl.getSummonerLeagues(reg, summonerId));
+    List<League> leagues = (response as List).map<League>((l) => League.fromJson(l)).toList();
+
+    return leagues;
   }
 
   static String getSummonerIcon(int id) {

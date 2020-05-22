@@ -1,4 +1,4 @@
-import 'package:league_plus/services/league_classes/classes.dart';
+import 'package:league_plus/services/league/classes.dart';
 
 class User {
   String uid;

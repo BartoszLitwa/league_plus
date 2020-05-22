@@ -1,12 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:league_plus/constants/styles.dart';
 import 'package:league_plus/screens/home/drawer.dart';
 import 'package:league_plus/screens/home/favourite_list.dart';
 import 'package:league_plus/screens/home/search_textField.dart';
 import 'package:league_plus/screens/profile/profile_card.dart';
-import 'package:league_plus/services/FireStore/database.dart';
-import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,7 +15,6 @@ class _HomeState extends State<Home> {
   final Color dark = Colors.grey[900];
 
   String currentTitle = 'League of Legends';
-  List<String> servers = ['EUNE', 'EUW', 'NA', 'KOR', 'OCE'];
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +67,7 @@ class _HomeState extends State<Home> {
 
             SizedBox(height: 20),
 
-            StreamProvider<DocumentSnapshot>.value(
-              value: DatabaseService.user,
-              //catchError: (e, s) => null,
-              child: FavouriteSummoners(),
-            ),
+            FavouriteSummoners(),
           ],
         ),
       ),

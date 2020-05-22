@@ -1,35 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:league_plus/services/league_classes/classes.dart';
+import 'package:league_plus/services/league/league_api.dart';
+import 'package:league_plus/services/league/classes.dart';
 
 class DatabaseService {
   static String uid;
-
   static final CollectionReference favouriteCollection = Firestore.instance.collection('favourite');
 
   static Stream<DocumentSnapshot> get user {
     return favouriteCollection.document(uid).snapshots();
   }
 
-  static Future setUserData(Summoner summoner) async {
+  static Future setUserData() async {
     await favouriteCollection.document(uid).setData({
+      'userSummoner': '',
       'summoners': {},
     }, merge: false);
   }
 
-  static Future updateUserData(Summoner summoner) async {
-    return favouriteCollection.document(uid).updateData({
-      'summoners': FieldValue.arrayUnion([summoner.toJson()])
+  static Future updateUserSummoner(FavouriteSummoner summoner) async {
+    await favouriteCollection.document(uid).updateData({
+      'userSummoner': summoner.toJson(),
     });
   }
 
-  static List<Summoner> _summonersFromSnapshot(DocumentSnapshot snapshot) {
+  static Future updateSummoners(FavouriteSummoner summoner) async {
+    return favouriteCollection.document(uid).updateData({
+      'summoners': FieldValue.arrayUnion([summoner.toJson()]),
+    });
+  }
+
+  static List<FavouriteSummoner> _summonersFromSnapshot(DocumentSnapshot snapshot) {
     if(snapshot.data == null || snapshot?.data['summoners'] == null)
      return null;
 
     try {
-      return snapshot?.data['summoners'].map<Summoner>((doc) {
-        var map = Map<String, dynamic>.from(doc);
-        return Summoner.fromJson(map);
+      return snapshot?.data['summoners'].map<FavouriteSummoner>((doc) {
+        return FavouriteSummoner.fromJson(doc);
       }).toList();
     }catch(ex) {
       return null;
@@ -37,6 +43,15 @@ class DatabaseService {
   }
 
   static Future<List<Summoner>> favouriteSummoners() async {
-    return _summonersFromSnapshot(await favouriteCollection.document(uid).get());
+    var list = _summonersFromSnapshot(await favouriteCollection.document(uid).get());
+    List<Summoner> newList = [];
+    if(list == null || list.isEmpty)
+      return newList;
+
+    for (var sum in list) {
+      newList.add(await LeagueService.getSummonerBySummonerID(sum.region, sum.summonerID));
+    }
+
+    return newList;
   }
 }
