@@ -46,15 +46,15 @@ class _HomeState extends State<Home> {
                 radius: 40,
             ),
 
-            SizedBox(height: 40),
+            SizedBox(height: 30),
 
             SearchTextField(dark: dark, white: white),
 
-            SizedBox(height: 40),
+            SizedBox(height: 30),
 
             ProfileCard(white: white, dark: dark),
 
-            SizedBox(height: 40),
+            SizedBox(height: 20),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
               ],
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 10),
 
             FavouriteSummoners(),
           ],

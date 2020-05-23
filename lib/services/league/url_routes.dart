@@ -16,12 +16,6 @@ class Regions {
   }
 }
 
-class Queues {
-  static final String solo = 'RANKED_SOLO_5x5';
-  static final String flexSR = 'RANKED_FLEX_SR';
-  static final String flexTT = 'RANKED_FLEX_TT';
-}
-
 class SummonerUrl {
   static String getSummonerByAccount(String reg, String account) {
     return '${Regions.getApiUrl(reg)}/lol/summoner/v4/summoners/by-account/$account';

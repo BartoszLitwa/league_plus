@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
+import 'package:league_plus/services/league/champions_name.dart';
 import 'dart:convert';
-import 'package:league_plus/constants/url_routes.dart';
+import 'package:league_plus/services/league/url_routes.dart';
 import 'package:league_plus/services/league/classes.dart';
 
 class LeagueService {
@@ -27,22 +28,32 @@ class LeagueService {
   }
 
   static Future<Summoner> getSummonerByName(String reg, String summonerName) async {
-    return Summoner.fromJson(await _getFromUrl(SummonerUrl.getSummonerByName(reg, summonerName)));
+    var sum = Summoner.fromJson(await _getFromUrl(SummonerUrl.getSummonerByName(reg, summonerName)));
+    sum.region = reg;
+    return sum;
   }
 
   static Future<Summoner> getSummonerByAccountID(String reg, String accountID) async {
-    return Summoner.fromJson(await _getFromUrl(SummonerUrl.getSummonerByAccount(reg, accountID)));
+    var sum = Summoner.fromJson(await _getFromUrl(SummonerUrl.getSummonerByAccount(reg, accountID)));
+    sum.region = reg;
+    return sum;
   }
 
   static Future<Summoner> getSummonerBySummonerID(String reg, String summonerID) async {
-    return Summoner.fromJson(await _getFromUrl(SummonerUrl.getSummonerBySummonerID(reg, summonerID)));
+    var sum = Summoner.fromJson(await _getFromUrl(SummonerUrl.getSummonerBySummonerID(reg, summonerID)));
+    sum.region = reg;
+    return sum;
   }
 
-  static Future<List<Champion>> getSummonersChampion(String reg, String summonerId) async {
+  static Future<List<Champion>> getSummonerChampions(String reg, String summonerId) async {
     var response = await _getFromUrl(ChampionMasteryUrl.getSummonerMastery(reg, summonerId));
     List<Champion> champs = (response as List).map<Champion>((c) => Champion.fromJson(c)).toList();
 
     return champs;
+  }
+
+  static Future<Champion> getSummonerMostMasteryChampion(String reg, String summonerId) async {
+    return (await getSummonerChampions(reg, summonerId)).first;
   }
 
   static Future<List<League>> getSummonersLeagues(String reg, String summonerId) async {
@@ -52,7 +63,42 @@ class LeagueService {
     return leagues;
   }
 
+  static Future<League> getSummonerSoloLeague(String reg, String summonerId) async {
+    return (await getSummonersLeagues(reg, summonerId)).where((l) => l.queueType == Queues.solo).first ?? null;
+  }
+
+  static Future<League> getSummonerFlexSRLeague(String reg, String summonerId) async {
+    return (await getSummonersLeagues(reg, summonerId)).where((l) => l.queueType == Queues.flexSR).first ?? null;
+  }
+
+  static Future<League> getSummonerFlexTTLeague(String reg, String summonerId) async {
+    return (await getSummonersLeagues(reg, summonerId)).where((l) => l.queueType == Queues.flexTT).first ?? null;
+  }
+
   static String getSummonerIcon(int id) {
     return 'http://ddragon.leagueoflegends.com/cdn/10.10.3208608/img/profileicon/$id.png';
   }
+
+  static String getChampionIconFromChampionName(int championID) {
+    final String champ = ChampionHelper.getChampNameByID(championID);
+    return 'http://ddragon.leagueoflegends.com/cdn/10.10.3208608/img/champion/${champ.replaceAll(' ', '')}.png';
+  }
+
+  static String summonerLeagueToAsset(String rank) {
+    return 'assets/lol_ranks/Emblem_${rank.toUpperCase()}.png';
+  }
+}
+
+class Regions {
+  static final String br = 'br1';
+  static final String eune = 'eun1';
+  static final String euw = 'euw1';
+  static final String jp = 'jp1';
+  static final String kr = 'kr';
+  static final String la1 = 'la1';
+  static final String la2 = 'la2';
+  static final String na = 'na1';
+  static final String oc = 'oc1';
+  static final String ru = 'ru';
+  static final String tr = 'tr1';
 }

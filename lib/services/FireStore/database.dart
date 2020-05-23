@@ -49,7 +49,9 @@ class DatabaseService {
       return newList;
 
     for (var sum in list) {
-      newList.add(await LeagueService.getSummonerBySummonerID(sum.region, sum.summonerID));
+      var summoner = await LeagueService.getSummonerBySummonerID(sum.region, sum.summonerID);
+      summoner.region = sum.region;
+      newList.add(summoner);
     }
 
     return newList;

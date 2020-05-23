@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:league_plus/constants/styles.dart';
-import 'package:league_plus/constants/url_routes.dart';
 import 'package:league_plus/services/FireStore/auth.dart';
 import 'package:league_plus/services/FireStore/database.dart';
 import 'package:league_plus/services/league/league_api.dart';

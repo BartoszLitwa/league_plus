@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:league_plus/constants/styles.dart';
+import 'package:league_plus/services/league/league_api.dart';
 
 class ChampionCard extends StatefulWidget {
-  final Color white;
-  final Color dark;
-
   final double winrate; 
   final double kdaRatio;
-  final String championIcon;
+  final int championIcon;
 
-  ChampionCard({this.white, this.dark, this.winrate, this.kdaRatio, this.championIcon});
+  ChampionCard({this.winrate, this.kdaRatio, this.championIcon});
 
   @override
   _ChampionCardState createState() => _ChampionCardState();
@@ -34,7 +32,7 @@ class _ChampionCardState extends State<ChampionCard> {
         children: <Widget>[
           CircleAvatar(
             backgroundColor: Colors.transparent,
-            backgroundImage: NetworkImage('http://ddragon.leagueoflegends.com/cdn/10.10.3208608/img/champion/Ekko.png'),
+            backgroundImage: NetworkImage(LeagueService.getChampionIconFromChampionName(widget.championIcon)),
           ),
 
           SizedBox(width: 5),

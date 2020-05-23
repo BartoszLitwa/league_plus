@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:league_plus/constants/styles.dart';
 import 'package:league_plus/screens/profile/champion_card.dart';
+import 'package:league_plus/services/league/league_api.dart';
 
 class ProfileCard extends StatefulWidget {
   final Color white;
@@ -56,7 +57,7 @@ class _ProfileCardState extends State<ProfileCard> {
                   Row(
                     children: <Widget>[
                       CircleAvatar(
-                        backgroundImage: AssetImage('assets/lol_ranks/Emblem_Challenger.png'),
+                        backgroundImage: AssetImage(LeagueService.summonerLeagueToAsset('challenger')),
                         backgroundColor: Colors.transparent,
                         radius: 8,
                       ),
@@ -79,9 +80,9 @@ class _ProfileCardState extends State<ProfileCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              ChampionCard(white: widget.white, dark: widget.dark, winrate: 63, kdaRatio: 4.13, championIcon: 'Ekko'), 
-              ChampionCard(white: widget.white, dark: widget.dark, winrate: 50, kdaRatio: 2.56, championIcon: 'Ekko'), 
-              ChampionCard(white: widget.white, dark: widget.dark, winrate: 100, kdaRatio: 3.00, championIcon: 'Ekko'), 
+              ChampionCard(winrate: 63, kdaRatio: 4.13, championIcon: 266), 
+              ChampionCard(winrate: 50, kdaRatio: 2.56, championIcon: 84), 
+              ChampionCard(winrate: 100, kdaRatio: 3.00, championIcon: 136), 
             ],
           ),
         ],

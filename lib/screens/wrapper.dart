@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:league_plus/screens/authentication/login.dart';
 import 'package:league_plus/screens/home/home.dart';
 import 'package:league_plus/services/FireStore/auth.dart';
 import 'package:league_plus/services/FireStore/database.dart';
@@ -17,16 +18,16 @@ class _WrapperState extends State<Wrapper> {
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
+            return Text('Not connected'); 
           case ConnectionState.waiting:
-            return Text('');
+            return Text('Loading'); 
           default:
-          if(snapshot.hasData && !snapshot.data.isAnonymous) {
-            DatabaseService.uid = snapshot.data.uid;
-            print(DatabaseService.uid);
-            return Home();
-          }
-          else
-            return Text('');
+            if(snapshot.hasData && !snapshot.data.isAnonymous) {
+              DatabaseService.uid = snapshot.data.uid;
+              return Home();
+            }
+            else
+              return Login();
         }
       }
     );

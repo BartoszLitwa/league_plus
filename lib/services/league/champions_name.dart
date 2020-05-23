@@ -80,7 +80,7 @@ class ChampionHelper {
         return "Evelynn";
 
       case 81:
-        return "Ezrael";
+        return "Ezreal";
 
       case 9:
         return "Fiddlesticks";
