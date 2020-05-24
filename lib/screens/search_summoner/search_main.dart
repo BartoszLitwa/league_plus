@@ -1,0 +1,30 @@
+import 'package:flutter/material.dart';
+import 'package:league_plus/screens/search_summoner/summoner_overview.dart';
+import 'package:league_plus/screens/shared/main_scaffold.dart';
+import 'package:league_plus/services/league/classes.dart';
+import 'package:league_plus/services/league/league_api.dart';
+
+class SearchSummoner extends StatefulWidget {
+  @override
+  _SearchSummonerState createState() => _SearchSummonerState();
+}
+
+class _SearchSummonerState extends State<SearchSummoner> {
+  final String currentTitle = 'League of Legends';
+
+  @override
+  Widget build(BuildContext context) {
+    final FavouriteSummoner sum = ModalRoute.of(context).settings.arguments ?? FavouriteSummoner(region: Regions.eune, summonerID: 'Synn3K');
+
+    return MainScaffold(title: 'League of Legends',
+     body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            SummonerOverview(sum: sum)
+          ],
+        ),
+      )
+    );
+  }
+}

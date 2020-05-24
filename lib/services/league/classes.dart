@@ -113,3 +113,39 @@ class League {
     inactive = json['inactive'];
   }
 }
+
+class MatchListDto{
+  int startIndex;
+  int totalGames;
+  int endIndex;
+  List<MatchReferenceDto> matches;
+
+  MatchListDto.fromJson(Map<String, dynamic> json) {
+    startIndex = json['startIndex'];
+    totalGames = json['totalGames'];
+    endIndex = json['endIndex'];
+    matches = (json['matches'] as List).map<MatchReferenceDto>((m) => MatchReferenceDto.fromJson(m)).toList();
+  }
+}
+
+class MatchReferenceDto {
+  int gameId;
+  String rolerole;
+  int season;
+  String platformId;
+  int champion;
+  int queue;
+  String lane;
+  int timestamp;
+
+  MatchReferenceDto.fromJson(Map<String, dynamic> json) {
+    gameId = json['gameId'];
+    rolerole = json['rolerole'];
+    season = json['season'];
+    platformId = json['platformId'];
+    champion = json['champion'];
+    queue = json['queue'];
+    lane = json['lane'];
+    timestamp = json['timestamp'];
+  }
+}

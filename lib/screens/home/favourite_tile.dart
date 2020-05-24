@@ -8,7 +8,7 @@ class FavourtieTile extends StatelessWidget {
 
   FavourtieTile({this.sum});
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     return FutureBuilder<League>(
       future: LeagueService.getSummonerSoloLeague(sum.region, sum.id),

@@ -56,4 +56,17 @@ class DatabaseService {
 
     return newList;
   }
+
+  static Future<FavouriteSummoner> getUserSummoner() async {
+    var snapshot = await favouriteCollection.document(uid).get();
+
+    if(snapshot.data == null || snapshot?.data['userSummoner'] == null)
+      return null;
+
+    try {
+      return FavouriteSummoner.fromJson(snapshot.data['userSummoner']);
+    }catch(ex) {
+      return null;
+    }
+  }
 }

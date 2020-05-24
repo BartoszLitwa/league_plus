@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:league_plus/services/FireStore/database.dart';
 import 'package:league_plus/services/league/classes.dart';
 import 'package:league_plus/services/league/league_api.dart';
 
 class SearchTextField extends StatefulWidget {
-  final Color white;
-  final Color dark;
-
-  SearchTextField({this.white, this.dark});
-
   @override
   _SearchTextFieldState createState() => _SearchTextFieldState();
 }
@@ -25,15 +19,15 @@ class _SearchTextFieldState extends State<SearchTextField> {
         filled: true,
         hintText: 'Search a summoner',
         hintStyle: TextStyle(
-          color: widget.white,
+          color: Theme.of(context).accentColor,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: widget.white, width: 2),
+          borderSide: BorderSide(color: Theme.of(context).accentColor, width: 2),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: widget.white, width: 2),
+          borderSide: BorderSide(color: Theme.of(context).accentColor, width: 2),
         ),
 
         suffixIcon: FlatButton(
@@ -41,11 +35,11 @@ class _SearchTextFieldState extends State<SearchTextField> {
           onPressed: () async {
             await searchForSummoner(_currentText);
           },
-          child: Icon(Icons.search, color: widget.white),
+          child: Icon(Icons.search, color: Theme.of(context).accentColor),
         ) 
       ),
 
-      style: TextStyle(color: widget.white),
+      style: TextStyle(color: Theme.of(context).accentColor),
 
       onChanged: (val) => _currentText = val,
       
@@ -56,10 +50,14 @@ class _SearchTextFieldState extends State<SearchTextField> {
   }
 
   Future searchForSummoner(String val) async {
-    if(val.isEmpty)
+    if(val == null || val.isEmpty)
       return;
 
     var sum = await LeagueService.getSummonerByName(Regions.eune, val);
-    DatabaseService.updateSummoners(FavouriteSummoner(region: sum.region, summonerID: sum.id));
+
+    if(sum == null)
+      return null;
+
+    Navigator.pushNamed(context, '/searchSummoner', arguments: FavouriteSummoner(region: Regions.eune, summonerID: val));
   }
 }

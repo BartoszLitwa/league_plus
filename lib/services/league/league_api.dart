@@ -87,6 +87,13 @@ class LeagueService {
   static String summonerLeagueToAsset(String rank) {
     return 'assets/lol_ranks/Emblem_${rank.toUpperCase()}.png';
   }
+
+  static Future<MatchListDto> getSummonerMatchList(String reg, String accountID, {int champion, int queue, int season, int endTime, int beginTime, int endIndex, int beginIndex}) async {
+    var response = await _getFromUrl(MatchUrl.getMatchListByAccountID(reg, accountID));
+    MatchListDto match = MatchListDto.fromJson(response);
+
+    return match;
+  }
 }
 
 class Regions {

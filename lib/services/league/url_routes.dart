@@ -74,3 +74,13 @@ class ChampionMasteryUrl {
   }
   
 }
+
+class MatchUrl {
+  static String getMatchByMatchID(String reg, String matchId) {
+    return '${Regions.getApiUrl(reg)}/lol/match/v4/matches/$matchId';
+  }
+
+  static String getMatchListByAccountID(String reg, String accoundID) {
+    return '${Regions.getApiUrl(reg)}/lol/match/v4/matchlists/by-account/$accoundID';
+  }
+}

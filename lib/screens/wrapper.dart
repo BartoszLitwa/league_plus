@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:league_plus/screens/authentication/login.dart';
-import 'package:league_plus/screens/home/home.dart';
+import 'package:league_plus/screens/home/league_main.dart';
 import 'package:league_plus/services/FireStore/auth.dart';
 import 'package:league_plus/services/FireStore/database.dart';
 
@@ -24,7 +24,7 @@ class _WrapperState extends State<Wrapper> {
           default:
             if(snapshot.hasData && !snapshot.data.isAnonymous) {
               DatabaseService.uid = snapshot.data.uid;
-              return Home();
+              return LeagueMain();
             }
             else
               return Login();
