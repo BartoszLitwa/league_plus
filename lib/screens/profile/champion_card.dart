@@ -32,7 +32,7 @@ class _ChampionCardState extends State<ChampionCard> {
         children: <Widget>[
           CircleAvatar(
             backgroundColor: Colors.transparent,
-            backgroundImage: NetworkImage(LeagueService.getChampionIconFromChampionName(widget.championIcon)),
+            backgroundImage: NetworkImage(LeagueService.getChampionIconFromChampionID(widget.championIcon)),
           ),
 
           SizedBox(width: 5),

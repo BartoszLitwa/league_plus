@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:league_plus/services/league/champions_name.dart';
+import 'package:league_plus/services/league/league_helpers.dart';
 import 'dart:convert';
 import 'package:league_plus/services/league/url_routes.dart';
 import 'package:league_plus/services/league/classes.dart';
@@ -28,7 +28,10 @@ class LeagueService {
   }
 
   static Future<Summoner> getSummonerByName(String reg, String summonerName) async {
-    var sum = Summoner.fromJson(await _getFromUrl(SummonerUrl.getSummonerByName(reg, summonerName)));
+    final response = await _getFromUrl(SummonerUrl.getSummonerByName(reg, summonerName));
+    if(response == null)
+      return null;
+    var sum = Summoner.fromJson(response);
     sum.region = reg;
     return sum;
   }
@@ -79,9 +82,14 @@ class LeagueService {
     return 'http://ddragon.leagueoflegends.com/cdn/10.10.3208608/img/profileicon/$id.png';
   }
 
-  static String getChampionIconFromChampionName(int championID) {
-    final String champ = ChampionHelper.getChampNameByID(championID);
-    return 'http://ddragon.leagueoflegends.com/cdn/10.10.3208608/img/champion/${champ.replaceAll(' ', '')}.png';
+  static String getChampionIconFromChampionID(int championID) {
+    final String champ = LeagueHelper.getChampNameByID(championID);
+    return 'http://ddragon.leagueoflegends.com/cdn/10.10.3208608/img/champion/${championID != 161 ? champ.replaceAll(' ', '') : 'Velkoz'}.png';
+  }
+
+  static String getSummonerSpellIconFromSpellID(int spellID) {
+    final String icon = LeagueHelper.getSummonerSpellNameByID(spellID);
+    return 'http://ddragon.leagueoflegends.com/cdn/10.10.3216176/img/spell/Summoner${spellID == 14 ? 'Dot' : icon}.png';
   }
 
   static String summonerLeagueToAsset(String rank) {
@@ -90,9 +98,12 @@ class LeagueService {
 
   static Future<MatchListDto> getSummonerMatchList(String reg, String accountID, {int champion, int queue, int season, int endTime, int beginTime, int endIndex, int beginIndex}) async {
     var response = await _getFromUrl(MatchUrl.getMatchListByAccountID(reg, accountID));
-    MatchListDto match = MatchListDto.fromJson(response);
+    return response != null ? MatchListDto.fromJson(response) : null;
+  }
 
-    return match;
+  static Future<MatchDto> getMatchByMatchId(String reg, String matchId) async {
+    var response = await _getFromUrl(MatchUrl.getMatchByMatchID(reg, matchId));
+    return response != null ? MatchDto.fromJson(response) : null;
   }
 }
 

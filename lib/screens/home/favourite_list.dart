@@ -4,12 +4,12 @@ import 'package:league_plus/screens/home/favourite_tile.dart';
 import 'package:league_plus/services/FireStore/database.dart';
 import 'package:league_plus/services/league/classes.dart';
 
-class FavouriteSummoners extends StatefulWidget {
+class FavouriteSummonersList extends StatefulWidget {
   @override
-  _FavouriteSummonersState createState() => _FavouriteSummonersState();
+  _FavouriteSummonersListState createState() => _FavouriteSummonersListState();
 }
 
-class _FavouriteSummonersState extends State<FavouriteSummoners> {
+class _FavouriteSummonersListState extends State<FavouriteSummonersList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(

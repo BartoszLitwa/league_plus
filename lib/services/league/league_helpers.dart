@@ -1,4 +1,4 @@
-class ChampionHelper {
+class LeagueHelper {
   static String getChampNameByID(int champId) {
     switch(champId) {
       case 266:
@@ -371,7 +371,10 @@ class ChampionHelper {
         return "Veigar";
 
       case 161:
-        return "Vel Koz";
+        return "Vel'Koz";
+
+      case 85:
+        return "Kennen";
 
       case 254:
         return "Vi";
@@ -429,5 +432,57 @@ class ChampionHelper {
     }
 
     return "";
+  }
+
+  static String getSummonerSpellNameByID(int spellID) {
+    switch (spellID) {
+      case 21:
+        return 'Barrier';
+      case 1:
+        return 'Cleanse';
+      case 2:
+        return 'Clairvoyance';
+      case 14:
+        return 'Ignite';
+      case 3:
+        return 'Exhaust';
+      case 4:
+        return 'Flash';
+      case 6:
+        return 'Ghost';
+      case 7:
+        return 'Heal';
+      case 13:
+        return 'Clarity';
+      case 17:
+        return 'Garrison';
+      case 10:
+        return 'Revive';
+      case 11:
+        return 'Smite';
+      case 12:
+        return 'Teleport';
+      default:
+        return '';
+    }
+  }
+
+  static String getSummonerPositionFromMatch() {
+    
+  }
+
+  static String getMultiKillTextFromInt(int kills) {
+    switch (kills) {
+      case 2:
+        return 'Double Kill!';
+      case 3:
+        return 'Tripple Kill!';
+      case 4:
+        return 'Quadra Kill!';
+      case 5:
+        return 'Penta Kill!';
+      default:
+        return '';
+    }
   }
 }

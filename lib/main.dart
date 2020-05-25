@@ -20,7 +20,7 @@ class _AppState extends State<App> {
     
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/searchSummoner',
+      initialRoute: '/leagueMain',
       routes: {
         '/leagueMain': (context) => Wrapper(),
         '/searchSummoner': (context) => SearchSummoner(),

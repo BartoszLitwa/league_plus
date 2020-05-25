@@ -69,10 +69,12 @@ class SummonerOverview extends StatelessWidget {
             )
           );
         } else {
-          return SpinKitRing(
-            color: Colors.white,
-            size: 50,
-          );
+          return Center(
+             child: SpinKitRing(
+               color: Theme.of(context).accentColor, 
+               size: 50,
+              ),
+           );
         }
       }
     );

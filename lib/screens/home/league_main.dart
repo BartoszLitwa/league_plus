@@ -61,7 +61,7 @@ class _LeagueMainState extends State<LeagueMain> {
 
             SizedBox(height: 10),
 
-            FavouriteSummoners(),
+            FavouriteSummonersList(),
           ],
         ),
       ),
