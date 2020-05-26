@@ -1,5 +1,4 @@
 import 'package:http/http.dart' as http;
-import 'package:league_plus/services/league/league_helpers.dart';
 import 'dart:convert';
 import 'package:league_plus/services/league/url_routes.dart';
 import 'package:league_plus/services/league/classes.dart';
@@ -7,6 +6,7 @@ import 'package:league_plus/services/league/classes.dart';
 class LeagueService {
   static final String _apiKey = 'RGAPI-ba289589-17c6-47ab-a8d2-97ff259d704b';
   static final http.Client _client = http.Client();
+  static String _currentVersion;
 
   static Future<dynamic> _getFromUrl(String url) async {
     try{
@@ -18,8 +18,10 @@ class LeagueService {
         "X-Riot-Token": _apiKey,
       });
 
-      if(response == null || response.statusCode != 200)
+      if(response == null || response.statusCode != 200) {
+        print(response.statusCode);
         return null;
+      }
 
       return jsonDecode(response.body);
     } catch (ex) {
@@ -78,24 +80,6 @@ class LeagueService {
     return (await getSummonersLeagues(reg, summonerId)).where((l) => l.queueType == Queues.flexTT).first ?? null;
   }
 
-  static String getSummonerIcon(int id) {
-    return 'http://ddragon.leagueoflegends.com/cdn/10.10.3208608/img/profileicon/$id.png';
-  }
-
-  static String getChampionIconFromChampionID(int championID) {
-    final String champ = LeagueHelper.getChampNameByID(championID);
-    return 'http://ddragon.leagueoflegends.com/cdn/10.10.3208608/img/champion/${championID != 161 ? champ.replaceAll(' ', '') : 'Velkoz'}.png';
-  }
-
-  static String getSummonerSpellIconFromSpellID(int spellID) {
-    final String icon = LeagueHelper.getSummonerSpellNameByID(spellID);
-    return 'http://ddragon.leagueoflegends.com/cdn/10.10.3216176/img/spell/Summoner${spellID == 14 ? 'Dot' : icon}.png';
-  }
-
-  static String summonerLeagueToAsset(String rank) {
-    return 'assets/lol_ranks/Emblem_${rank.toUpperCase()}.png';
-  }
-
   static Future<MatchListDto> getSummonerMatchList(String reg, String accountID, {int champion, int queue, int season, int endTime, int beginTime, int endIndex, int beginIndex}) async {
     var response = await _getFromUrl(MatchUrl.getMatchListByAccountID(reg, accountID));
     return response != null ? MatchListDto.fromJson(response) : null;
@@ -105,6 +89,45 @@ class LeagueService {
     var response = await _getFromUrl(MatchUrl.getMatchByMatchID(reg, matchId));
     return response != null ? MatchDto.fromJson(response) : null;
   }
+
+  static Future<String> updateCurrentLeagueVersion() async {
+    var response = await _client.get('https://ddragon.leagueoflegends.com/api/versions.json');
+
+    if(response == null || response.statusCode != 200) {
+      print(response.statusCode);
+      return '';
+    }
+
+    List<String> versions = (jsonDecode(response.body) as List<dynamic>).cast<String>();
+    _currentVersion = versions.first;
+    print(_currentVersion);
+
+    return versions.first;
+  }
+  
+  static String getSummonerIcon(int id) {
+    return 'http://ddragon.leagueoflegends.com/cdn/${_currentVersion ?? '10.10.3216176'}/img/profileicon/$id.png';
+  }
+
+  // static String _getChampionIconFromChampionID(int championID) {
+  //   final String champ = LeagueHelper.getChampNameByID(championID);
+  //   String fixedChamp = champ.replaceAll(' ', '').toLowerCase();
+  //   fixedChamp = fixedChamp[0].toUpperCase() + fixedChamp.substring(1);
+  //   fixedChamp = championID == 21 ? 'MissFortune' : championID == 36 ? 'DrMundo' : championID == 59 ? 'JarvanIV' : championID == 64 ? 'LeeSin' :
+  //    championID == 62 ? 'MonkeyKing' : championID == 136 ? 'AurelionSol' : championID == 5 ? 'XinZhao' : championID == 11 ? 'MasterYi' :
+  //    championID == 4 ? 'TwistedFate' : fixedChamp;
+  //   return 'http://ddragon.leagueoflegends.com/cdn/${_currentVersion ?? '10.10.3216176'}/img/champion/$fixedChamp.png';
+  // }
+
+  // static String _getSummonerSpellIconFromSpellID(int spellID) {
+  //   final String icon = LeagueHelper.getSummonerSpellNameByID(spellID);
+  //   final String fixedIcon = spellID == 14 ? 'Dot' : spellID == 6 ? 'Haste' : spellID == 1 ? 'SummonerBoost' : spellID == 2 ? 'SummonerMana' : icon;
+  //   return 'http://ddragon.leagueoflegends.com/cdn/${_currentVersion ?? '10.10.3216176'}/img/spell/Summoner$fixedIcon.png';
+  // }
+
+  // static String _getSummonerItemIconFromID(int id) {
+  //   return 'http://ddragon.leagueoflegends.com/cdn/${_currentVersion ?? '10.10.3216176'}/img/item/$id.png';
+  // }
 }
 
 class Regions {

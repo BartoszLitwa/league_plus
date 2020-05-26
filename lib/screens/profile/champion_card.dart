@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:league_plus/constants/styles.dart';
-import 'package:league_plus/services/league/league_api.dart';
+import 'package:league_plus/services/league/league_assets.dart';
 
 class ChampionCard extends StatefulWidget {
   final double winrate; 
@@ -32,7 +32,7 @@ class _ChampionCardState extends State<ChampionCard> {
         children: <Widget>[
           CircleAvatar(
             backgroundColor: Colors.transparent,
-            backgroundImage: NetworkImage(LeagueService.getChampionIconFromChampionID(widget.championIcon)),
+            backgroundImage: AssetImage(LeagueAssets.getChampionIconFromChampionID(widget.championIcon)),
           ),
 
           SizedBox(width: 5),

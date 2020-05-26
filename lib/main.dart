@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:league_plus/screens/search_summoner/search_main.dart';
 import 'package:league_plus/screens/wrapper.dart';
+import 'package:league_plus/services/league/league_api.dart';
 
 void main() => runApp(App());
 
@@ -17,6 +18,9 @@ class _AppState extends State<App> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    // Get current version/patch to get correct and updated stuff from ddragon
+    LeagueService.updateCurrentLeagueVersion();
     
     return MaterialApp(
       debugShowCheckedModeBanner: false,

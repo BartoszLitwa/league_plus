@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:league_plus/constants/styles.dart';
+import 'package:league_plus/screens/search_summoner/item_icon.dart';
+import 'package:league_plus/screens/search_summoner/match_participants.dart';
+import 'package:league_plus/services/league/league_assets.dart';
 import 'package:league_plus/services/league/league_helpers.dart';
 import 'package:league_plus/services/league/classes.dart';
 import 'package:league_plus/services/league/league_api.dart';
@@ -28,39 +31,64 @@ class MatchTile extends StatelessWidget {
             return SizedBox(
               height: 105,
                 child: Container(
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                     color: stats.win ? Colors.blue[400] : Colors.deepOrange,
                   ),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: Colors.transparent,
-                            backgroundImage: NetworkImage(LeagueService.getChampionIconFromChampionID(matchRef.champion)),
-                            radius: 25,
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(25, 30, 0, 0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                                  color: Colors.black
+                          Padding(
+                            padding: const EdgeInsets.only(left: 2),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  backgroundImage: AssetImage(LeagueAssets.getChampionIconFromChampionID(matchRef.champion)),
+                                  radius: 25,
+                                  child: Container(
+                                    padding: EdgeInsets.fromLTRB(25, 30, 0, 0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                        color: Colors.black
+                                      ),
+
+                                      child: Text(
+                                        '${stats.champLevel}',
+                                        style: defaultStyle.copyWith(fontSize: 14),
+                                      ),
+                                    ),
+                                  ),
                                 ),
 
-                                child: Text(
-                                  '${stats.champLevel}',
-                                  style: defaultStyle.copyWith(fontSize: 14),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      backgroundImage: AssetImage(LeagueAssets.getSummonerSpellIconFromSpellID(participant.spell1Id)),
+                                      radius: 12,
+                                    ),
+                                    SizedBox(width: 2,),
+                                    CircleAvatar(
+                                      backgroundImage: AssetImage(LeagueAssets.getSummonerSpellIconFromSpellID(participant.spell2Id)),
+                                      radius: 12,
+                                    ),
+                                  ],
                                 ),
-                              ),
+                              ],
                             ),
                           ),
 
                           SizedBox(height: 2),
 
                           Container(
-                            padding: EdgeInsets.only(left: 2),
+                            padding: EdgeInsets.only(left: 5),
                             child: Text(
                               LeagueHelper.getChampNameByID(matchRef.champion),
                               style: defaultStyle.copyWith(fontSize: 12),
@@ -73,12 +101,12 @@ class MatchTile extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               CircleAvatar(
-                                backgroundImage: NetworkImage(LeagueService.getSummonerSpellIconFromSpellID(participant.spell1Id)),
+                                backgroundImage: AssetImage(LeagueAssets.getSummonerSpellIconFromSpellID(participant.spell1Id)),
                                 radius: 12,
                               ),
                               SizedBox(width: 2,),
                               CircleAvatar(
-                                backgroundImage: NetworkImage(LeagueService.getSummonerSpellIconFromSpellID(participant.spell2Id)),
+                                backgroundImage: AssetImage(LeagueAssets.getSummonerSpellIconFromSpellID(participant.spell2Id)),
                                 radius: 12,
                               ),
                             ],
@@ -86,23 +114,6 @@ class MatchTile extends StatelessWidget {
                         ],
                       ),
                     
-                      SizedBox(width: 10,),
-
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          CircleAvatar(
-                                backgroundImage: NetworkImage(LeagueService.getSummonerSpellIconFromSpellID(participant.spell1Id)),
-                                radius: 12,
-                              ),
-                              SizedBox(width: 2,),
-                              CircleAvatar(
-                                backgroundImage: NetworkImage(LeagueService.getSummonerSpellIconFromSpellID(participant.spell2Id)),
-                                radius: 12,
-                              ),
-                        ],
-                      ),
-
                       SizedBox(width: 20,),
 
                       Column(
@@ -118,7 +129,7 @@ class MatchTile extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 5,),
-                          Text('$kdaRatio KDA', style: defaultStyle.copyWith(color: Theme.of(context).accentColor),),
+                          Text('${kdaRatio == double.nan || kdaRatio == double.infinity ? 'Perfect' : kdaRatio} KDA', style: defaultStyle.copyWith(color: Theme.of(context).accentColor),),
                           SizedBox(height: 10,),
                           Container(
                             child: stats.largestMultiKill >= 2 ? Container(
@@ -132,6 +143,44 @@ class MatchTile extends StatelessWidget {
                           ),
                         ],
                       ),
+
+                      SizedBox(width: 20,),
+
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              ItemIcon(itemID: stats.item0),
+                              ItemIcon(itemID: stats.item1),
+                              ItemIcon(itemID: stats.item2),
+                            ],
+                          ),
+                          SizedBox(height: 5,),
+                          Row(
+                            children: <Widget>[
+                              ItemIcon(itemID: stats.item3),
+                              ItemIcon(itemID: stats.item4),
+                              ItemIcon(itemID: stats.item5),
+                            ],
+                          ),
+                          SizedBox(height: 5,),
+                          Row(
+                            children: <Widget>[
+                              ItemIcon(itemID: stats.item6),
+                              SizedBox(width: 10,),
+                              Image.asset('assets/ControlWard.png'),
+                              SizedBox(width: 5,),
+                              Text('${stats.visionWardsBoughtInGame}', style: defaultStyle,),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(width: 10,),
+
+                      MatchParticipants(participants: match.participants, summonerTeamID: participant.teamId),
                     ],
                   ),
                 )

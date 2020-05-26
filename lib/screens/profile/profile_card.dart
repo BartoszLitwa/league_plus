@@ -4,6 +4,7 @@ import 'package:league_plus/constants/styles.dart';
 import 'package:league_plus/screens/profile/champion_card.dart';
 import 'package:league_plus/services/league/classes.dart';
 import 'package:league_plus/services/league/league_api.dart';
+import 'package:league_plus/services/league/league_assets.dart';
 
 class ProfileCard extends StatefulWidget {
   final FavouriteSummoner summoner;
@@ -68,7 +69,7 @@ class _ProfileCardState extends State<ProfileCard> {
                               return Row(
                                 children: <Widget>[
                                   CircleAvatar(
-                                    backgroundImage: AssetImage(LeagueService.summonerLeagueToAsset(snapshot.data.tier)),
+                                    backgroundImage: AssetImage(LeagueAssets.summonerLeagueToAsset(snapshot.data.tier)),
                                     backgroundColor: Colors.transparent,
                                     radius: 8,
                                   ),

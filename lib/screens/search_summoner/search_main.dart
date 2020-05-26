@@ -16,7 +16,7 @@ class _SearchSummonerState extends State<SearchSummoner> {
 
   @override
   Widget build(BuildContext context) {
-    final FavouriteSummoner sum = ModalRoute.of(context).settings.arguments ?? FavouriteSummoner(region: Regions.eune, summonerID: 'LazyTurtle345');
+    final FavouriteSummoner sum = ModalRoute.of(context).settings.arguments ?? FavouriteSummoner(region: Regions.eune, summonerID: 'Synn3K');
 
     return MainScaffold(title: 'League of Legends',
      body: FutureBuilder<Summoner>(

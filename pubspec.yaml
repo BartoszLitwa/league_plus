@@ -55,6 +55,9 @@ flutter:
     - assets/
     - assets/lol_ranks/
     - assets/lol_positions/
+    - assets/lol_champions/
+    - assets/lol_items/
+    - assets/lol_summoner_spells/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

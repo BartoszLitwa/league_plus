@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:league_plus/constants/styles.dart';
 import 'package:league_plus/services/league/classes.dart';
 import 'package:league_plus/services/league/league_api.dart';
+import 'package:league_plus/services/league/league_assets.dart';
 
 class SummonerOverview extends StatelessWidget {
   final FavouriteSummoner sum;
@@ -15,6 +16,8 @@ class SummonerOverview extends StatelessWidget {
       future: LeagueService.getSummonerByName(sum.region, sum.summonerID),
       builder: (context, snapshot) {
         if(snapshot.hasData) {
+          final Summoner summoner = snapshot.data;
+
           return Container(
             child: Column(
               children: <Widget>[
@@ -32,7 +35,7 @@ class SummonerOverview extends StatelessWidget {
                         children: <Widget>[
                           CircleAvatar(
                             backgroundColor: Colors.transparent,
-                            backgroundImage: NetworkImage(LeagueService.getSummonerIcon(snapshot.data.profileIconId)),
+                            backgroundImage: NetworkImage(LeagueService.getSummonerIcon(summoner.profileIconId)),
                             radius: 30,
                             child: Container(
                               padding: EdgeInsets.fromLTRB(25, 40, 0, 0),
@@ -43,7 +46,7 @@ class SummonerOverview extends StatelessWidget {
                                 ),
 
                                 child: Text(
-                                  snapshot.data.summonerLevel.toString(),
+                                  summoner.summonerLevel.toString(),
                                   style: defaultStyle.copyWith(fontSize: 14),
                                 ),
                               ),
@@ -52,13 +55,49 @@ class SummonerOverview extends StatelessWidget {
 
                           SizedBox(width: 20),
 
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(snapshot.data.name, style: defaultStyle.copyWith(color: Theme.of(context).accentColor, fontSize: 28)),
-                              ],
-                            ),
+                          FutureBuilder<List<League>>(
+                            future: LeagueService.getSummonersLeagues(summoner.region, summoner.id),
+                            builder: (context, snapshot) {
+                              if(snapshot.hasData) {
+                                final List<League> leagues = snapshot.data;
+                                final League soloDuo = leagues.where((e) => e.queueType == Queues.solo).first;
+
+                                return Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(summoner.name, style: defaultStyle.copyWith(color: Theme.of(context).accentColor, fontSize: 28)),
+
+                                      SizedBox(height: 10,),
+
+                                      Row(
+                                        children: <Widget>[
+                                          CircleAvatar(
+                                            backgroundImage: AssetImage(LeagueAssets.summonerLeagueToAsset(soloDuo.tier)),
+                                            backgroundColor: Colors.transparent,
+                                            radius: 10,
+                                          ),
+                                          SizedBox(width: 5),
+                                          
+                                          Text('${soloDuo.tier ?? 'Unranked'} ${soloDuo.rank ?? ''}', style: defaultStyle),
+                                          SizedBox(width: 10,),
+                                          Text('|', style: defaultStyle),
+                                          SizedBox(width: 10,),
+                                          Text('${soloDuo.leaguePoints ?? ''} LP', style: defaultStyle),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                return Center(
+                                  child: SpinKitRing(
+                                    color: Theme.of(context).accentColor, 
+                                    size: 50,
+                                    ),
+                                );
+                              }
+                            }
                           ),
                         ]
                       )

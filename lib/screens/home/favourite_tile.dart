@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:league_plus/constants/styles.dart';
 import 'package:league_plus/services/league/league_api.dart';
 import 'package:league_plus/services/league/classes.dart';
+import 'package:league_plus/services/league/league_assets.dart';
 
 class FavourtieTile extends StatelessWidget {
   final Summoner sum;
@@ -56,7 +57,7 @@ class FavourtieTile extends StatelessWidget {
                         builder: (context, snapshot) {
                           if(snapshot.hasData) {
                             return CircleAvatar(
-                              backgroundImage: NetworkImage(LeagueService.getChampionIconFromChampionID(snapshot.data.championId)),
+                              backgroundImage: AssetImage(LeagueAssets.getChampionIconFromChampionID(snapshot.data.championId)),
                               backgroundColor: Colors.transparent,
                               radius: 16,
                             );
@@ -73,7 +74,7 @@ class FavourtieTile extends StatelessWidget {
                       Row(
                         children: <Widget>[
                           CircleAvatar(
-                            backgroundImage: AssetImage(LeagueService.summonerLeagueToAsset(snapshot.data.tier)),
+                            backgroundImage: AssetImage(LeagueAssets.summonerLeagueToAsset(snapshot.data.tier)),
                             backgroundColor: Colors.transparent,
                             radius: 10,
                           ),

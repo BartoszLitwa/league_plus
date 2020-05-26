@@ -23,7 +23,7 @@ class _MatchListState extends State<MatchList> {
           return Expanded(
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: 5,
+              itemCount: 30,
               itemBuilder: (context, index) {
                 return MatchTile(sum: FavouriteSummoner(region: widget.summoner.region, summonerID: widget.summoner.id), matchRef: snapshot.data.matches[index]);
               }
