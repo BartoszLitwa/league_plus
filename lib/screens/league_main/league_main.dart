@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:league_plus/constants/styles.dart';
-import 'package:league_plus/screens/home/favourite_list.dart';
-import 'package:league_plus/screens/home/search_textField.dart';
+import 'package:league_plus/screens/league_main/favourite_list.dart';
+import 'package:league_plus/screens/league_main/search_textField.dart';
 import 'package:league_plus/screens/profile/profile_card.dart';
 import 'package:league_plus/screens/shared/main_scaffold.dart';
 import 'package:league_plus/services/FireStore/database.dart';

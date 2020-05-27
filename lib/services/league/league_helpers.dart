@@ -353,4 +353,149 @@ class LeagueHelper {
         return '';
     }
   }
+
+  static String getSummonnerRuneFromID(int id) {
+    switch (id) {
+      case 8000:
+        return 'Precision';
+      case 8100:
+        return 'Domination';
+      case 8112:
+        return 'Electrocute';
+      case 8124:
+        return 'Predator';
+      case 8128:
+        return 'Dark Harvest';
+      case 9923:
+        return 'Hail Of Blades';
+      case 8126:
+        return 'Cheap Shot';
+      case 8139:
+        return 'Taste Of Blood';
+      case 8143:
+        return 'Sudden Impact';
+      case 8136:
+        return 'Zombie Ward';
+      case 8120:
+        return 'Ghost Poro';
+      case 8138:
+        return 'Eyeball Collection';
+      case 8135:
+        return 'Ravenous Hunter';
+      case 8134:
+        return 'Ingenious Hunter';
+      case 8105:
+        return 'Relentless Hunter';
+      case 8106:
+        return 'Ultimate Hunter';
+      case 8300:
+        return 'Inspiration';
+      case 8351:
+        return 'Glacial Augment';
+      case 8360:
+        return 'Unsealed Spellbook';
+      case 8358:
+        return 'Master Key';
+      case 8306:
+        return 'Hextech Flashtraption';
+      case 8304:
+        return 'Magical Footwear';
+      case 8313:
+        return 'Perfect Timing';
+      case 8321:
+        return 'Futures Market';
+      case 8316:
+        return 'Minion Dematerializer';
+      case 8345:
+        return 'Biscuit Delivery';
+      case 8347:
+        return 'Cosmic Insight';
+      case 8410:
+        return 'Approach Velocity';
+      case 8352:
+        return 'Time Warp Tonic';
+      case 8000:
+        return 'Precision';
+      case 8005:
+        return 'Press The Attack';
+      case 8008:
+        return 'Lethal Tempo';
+      case 8021:
+        return 'Fleet Footwork';
+      case 8010:
+        return 'Conqueror';
+      case 9101:
+        return 'Overheal';
+      case 9111:
+        return 'Triumph';
+      case 8009:
+        return 'Presence Of Mind';
+      case 9104:
+        return 'Legend Alacrity';
+      case 9105:
+        return 'Legend Tenacity';
+      case 9103:
+        return 'Legend Bloodline';
+      case 8014:
+        return 'Coup De Grace';
+      case 8017:
+        return 'Cut Down';
+      case 8299:
+        return 'Last Stand';
+      case 8400:
+        return 'Resolve';
+      case 8437:
+        return 'Grasp Of The Undying';
+      case 8439:
+        return 'Aftershock';
+      case 8465:
+        return 'Guardian';
+      case 8446:
+        return 'Demolish';
+      case 8463:
+        return 'Font Of Life';
+      case 8401:
+        return 'Shield Bash';
+      case 8429:
+        return 'Conditioning';
+      case 8444:
+        return 'Second Wind';
+      case 8473:
+        return 'Bone Plating';
+      case 8451:
+        return 'Overgrowth';
+      case 8453:
+        return 'Revitalize';
+      case 8242:
+        return 'Unflinching';
+      case 8200:
+        return 'Sorcery';
+      case 8214:
+        return 'Summon Aery';
+      case 8229:
+        return 'Arcane Comet';
+      case 8230:
+        return 'Phase Rush';
+      case 8224:
+        return 'Nullifying Orb';
+      case 8226:
+        return 'Manaflow Band';
+      case 8275:
+        return 'Nimbus Cloak';
+      case 8210:
+        return 'Transcendence';
+      case 8234:
+        return 'Celerity';
+      case 8233:
+        return 'Absolute Focus';
+      case 8237:
+        return 'Scorch';
+      case 8232:
+        return 'Waterwalking';
+      case 8236:
+        return 'Gathering Storm';
+      default:
+        return '';
+    }
+  }
 }

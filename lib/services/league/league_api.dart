@@ -1,10 +1,10 @@
 import 'package:http/http.dart' as http;
+import 'package:league_plus/services/FireStore/remote_config.dart';
 import 'dart:convert';
 import 'package:league_plus/services/league/url_routes.dart';
 import 'package:league_plus/services/league/classes.dart';
 
 class LeagueService {
-  static final String _apiKey = 'RGAPI-ba289589-17c6-47ab-a8d2-97ff259d704b';
   static final http.Client _client = http.Client();
   static String _currentVersion;
 
@@ -15,7 +15,7 @@ class LeagueService {
         "Accept-Language": "pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7",
         "Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
         "Origin": "https://developer.riotgames.com",
-        "X-Riot-Token": _apiKey,
+        "X-Riot-Token": ConfigRemote.getRiotApiKey(),
       });
 
       if(response == null || response.statusCode != 200) {
@@ -33,8 +33,8 @@ class LeagueService {
     final response = await _getFromUrl(SummonerUrl.getSummonerByName(reg, summonerName));
     if(response == null)
       return null;
-    var sum = Summoner.fromJson(response);
-    sum.region = reg;
+
+    var sum = Summoner.fromJson(response, region: reg);
     return sum;
   }
 
@@ -58,26 +58,30 @@ class LeagueService {
   }
 
   static Future<Champion> getSummonerMostMasteryChampion(String reg, String summonerId) async {
-    return (await getSummonerChampions(reg, summonerId)).first;
+    List<Champion> champs = await getSummonerChampions(reg, summonerId);
+    return champs != null ? champs.first : null;
   }
 
   static Future<List<League>> getSummonersLeagues(String reg, String summonerId) async {
     var response = await _getFromUrl(LeagueUrl.getSummonerLeagues(reg, summonerId));
+    if(response == null)
+      return null;
+
     List<League> leagues = (response as List).map<League>((l) => League.fromJson(l)).toList();
 
     return leagues;
   }
 
   static Future<League> getSummonerSoloLeague(String reg, String summonerId) async {
-    return (await getSummonersLeagues(reg, summonerId)).where((l) => l.queueType == Queues.solo).first ?? null;
+    return (await getSummonersLeagues(reg, summonerId))?.where((l) => l.queueType == Queues.solo)?.first ?? null;
   }
 
   static Future<League> getSummonerFlexSRLeague(String reg, String summonerId) async {
-    return (await getSummonersLeagues(reg, summonerId)).where((l) => l.queueType == Queues.flexSR).first ?? null;
+    return (await getSummonersLeagues(reg, summonerId))?.where((l) => l.queueType == Queues.flexSR)?.first ?? null;
   }
 
   static Future<League> getSummonerFlexTTLeague(String reg, String summonerId) async {
-    return (await getSummonersLeagues(reg, summonerId)).where((l) => l.queueType == Queues.flexTT).first ?? null;
+    return (await getSummonersLeagues(reg, summonerId))?.where((l) => l.queueType == Queues.flexTT)?.first ?? null;
   }
 
   static Future<MatchListDto> getSummonerMatchList(String reg, String accountID, {int champion, int queue, int season, int endTime, int beginTime, int endIndex, int beginIndex}) async {

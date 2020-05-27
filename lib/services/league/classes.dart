@@ -17,9 +17,9 @@ class Summoner {
 
   String region;
 
-  Summoner({this.id, this.accountId, this.puuid, this.name, this.profileIconId, this.revisionDate, this.summonerLevel});
+  Summoner({this.id, this.accountId, this.puuid, this.name, this.profileIconId, this.revisionDate, this.summonerLevel, this.region});
 
-  Summoner.fromJson(Map<String, dynamic> json) {
+  Summoner.fromJson(Map<String, dynamic> json, {this.region}) {
     id = json['id'];
     accountId = json['accountId'];
     puuid = json['puuid'];

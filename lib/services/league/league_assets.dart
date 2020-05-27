@@ -26,6 +26,11 @@ class LeagueAssets {
     return 'assets/lol_summoner_spells/Summoner$fixedIcon.png';
   }
 
+  static String getRuneIconFromRuneID(int runeID) {
+    final String rune = LeagueHelper.getSummonnerRuneFromID(runeID).replaceAll(' ', '');
+    return 'assets/lol_perks/runes/$rune.png';
+  }
+
   static String getSummonerItemIconFromID(int id) {
     return 'assets/lol_items/$id.png';
   }

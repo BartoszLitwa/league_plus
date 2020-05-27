@@ -24,8 +24,10 @@ class DatabaseService {
   }
 
   static Future updateSummoners(FavouriteSummoner summoner) async {
+    bool favourite = await checkIfSummonerIsFavourite(summoner);
+
     return favouriteCollection.document(uid).updateData({
-      'summoners': FieldValue.arrayUnion([summoner.toJson()]),
+      'summoners': favourite ? FieldValue.arrayRemove([summoner.toJson()]) : FieldValue.arrayUnion([summoner.toJson()]), 
     });
   }
 
@@ -43,18 +45,34 @@ class DatabaseService {
   }
 
   static Future<List<Summoner>> favouriteSummoners() async {
-    var list = _summonersFromSnapshot(await favouriteCollection.document(uid).get());
-    List<Summoner> newList = [];
-    if(list == null || list.isEmpty)
+    try {
+      var list = _summonersFromSnapshot(await favouriteCollection.document(uid).get());
+      List<Summoner> newList = [];
+      if(list == null || list.isEmpty)
+        return newList;
+
+      for (var sum in list) {
+        var summoner = await LeagueService.getSummonerBySummonerID(sum.region, sum.summonerID);
+        summoner.region = sum.region;
+        newList.add(summoner);
+      }
+
       return newList;
-
-    for (var sum in list) {
-      var summoner = await LeagueService.getSummonerBySummonerID(sum.region, sum.summonerID);
-      summoner.region = sum.region;
-      newList.add(summoner);
+    } catch(ex) {
+      return null;
     }
+  }
 
-    return newList;
+  static Future<bool> checkIfSummonerIsFavourite(FavouriteSummoner sum) async {
+    try {
+      var list = _summonersFromSnapshot(await favouriteCollection.document(uid).get());
+      if(list == null || list.isEmpty)
+        return false;
+
+      return list.firstWhere((e) => e.region == sum.region && e.summonerID == sum.summonerID, orElse: () => null) != null;
+    } catch(ex) {
+      return false;
+    }
   }
 
   static Future<FavouriteSummoner> getUserSummoner() async {

@@ -29,6 +29,7 @@ dependencies:
 
   firebase_auth: ^0.16.0
   cloud_firestore: ^0.13.5
+  firebase_remote_config: ^0.3.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -58,6 +59,8 @@ flutter:
     - assets/lol_champions/
     - assets/lol_items/
     - assets/lol_summoner_spells/
+    - assets/lol_perks/stats/
+    - assets/lol_perks/runes/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

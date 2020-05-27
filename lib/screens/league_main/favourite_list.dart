@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:league_plus/screens/home/favourite_tile.dart';
+import 'package:league_plus/screens/league_main/favourite_tile.dart';
 import 'package:league_plus/services/FireStore/database.dart';
 import 'package:league_plus/services/league/classes.dart';
 

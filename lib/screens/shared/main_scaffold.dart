@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:league_plus/screens/home/drawer.dart';
+import 'package:league_plus/screens/league_main/drawer.dart';
 
 class MainScaffold extends StatefulWidget {
   final Widget body;

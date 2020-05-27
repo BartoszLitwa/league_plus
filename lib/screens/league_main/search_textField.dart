@@ -31,7 +31,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
         ),
 
         suffixIcon: FlatButton(
-          padding: EdgeInsets.symmetric(horizontal: 0, vertical: -20),
+          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 20),
           onPressed: () async {
             await searchForSummoner(_currentText);
           },
