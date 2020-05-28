@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:league_plus/screens/profile/champion_card.dart';
 import 'package:league_plus/screens/search_summoner/match_tile.dart';
 import 'package:league_plus/services/league/classes.dart';
 import 'package:league_plus/services/league/league_api.dart';
@@ -24,13 +22,18 @@ class _MatchListState extends State<MatchList> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _cache.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<MatchListDto>(
       future: LeagueService.getSummonerMatchList(widget.summoner.region, widget.summoner.accountId),
       builder: (builder, snapshot) {
         if(snapshot.hasData) {
           final MatchListDto match = snapshot.data;
-          print(match.totalGames);
 
           return Expanded(
             child: Column(
@@ -51,7 +54,7 @@ class _MatchListState extends State<MatchList> {
                 Expanded(
                   child: ListView.builder(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: 10,
+                    itemCount: match.matches.length,
                     itemBuilder: (context, index) {
                       return _getItem(index, match.matches[index]);
                     }
@@ -62,10 +65,7 @@ class _MatchListState extends State<MatchList> {
           );
         } else {
           return Center(
-             child: SpinKitRing(
-               color: Theme.of(context).accentColor, 
-               size: 50,
-              ),
+             child: CircularProgressIndicator(backgroundColor: Theme.of(context).accentColor),
            );
         }
       },
@@ -73,17 +73,20 @@ class _MatchListState extends State<MatchList> {
   }
 
   Widget _getItem(int index, MatchReferenceDto matchRef) {
-    return _cache.putIfAbsent(index,
-      () => FutureBuilder<MatchDto>(
+    if(_cache[index] != null) {
+      return _cache[index];
+    } else {
+      return FutureBuilder<MatchDto>(
         future: LeagueService.getMatchByMatchId(widget.summoner.region, matchRef.gameId.toString()),
         builder: (context, snapshot) {
           if(snapshot.hasData) {
-            return MatchTile(sum: FavouriteSummoner(region: widget.summoner.region, summonerID: widget.summoner.id), match: snapshot.data);
+            _cache[index] = MatchTile(sum: FavouriteSummoner(region: widget.summoner.region, summonerID: widget.summoner.id), match: snapshot.data);
+            return _cache[index];
           } else {
-            return SpinKitCircle(color: Theme.of(context).accentColor, size: 50);
+            return CircularProgressIndicator();
           }
         }
-      )
-    );
+      );
+    }
   }
 }

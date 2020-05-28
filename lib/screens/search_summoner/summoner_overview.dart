@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:league_plus/constants/styles.dart';
 import 'package:league_plus/services/FireStore/database.dart';
 import 'package:league_plus/services/league/classes.dart';
@@ -27,28 +26,25 @@ class _SummonerOverviewState extends State<SummonerOverview> {
           final Summoner summoner = snapshot.data;
           final FavouriteSummoner favSummoner = FavouriteSummoner(region: summoner.region, summonerID: summoner.id);
 
-          return FutureBuilder<bool>(
-            future: DatabaseService.checkIfSummonerIsFavourite(favSummoner),
-            builder: (context, snapshot) {
-              if(snapshot.hasData) {
-                final bool isFavourite = snapshot.data;
-
-                return Container(
+          return Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            child: Row(
                               children: <Widget>[
                                 CircleAvatar(
                                   backgroundColor: Colors.transparent,
@@ -72,88 +68,100 @@ class _SummonerOverviewState extends State<SummonerOverview> {
 
                                 SizedBox(width: 20),
 
-                                FutureBuilder<List<League>>(
-                                  future: LeagueService.getSummonersLeagues(summoner.region, summoner.id),
-                                  builder: (context, snapshot) {
-                                    if(snapshot.hasData) {
-                                      final List<League> leagues = snapshot.data;
-                                      final League soloDuo = leagues.where((e) => e.queueType == Queues.solo).first;
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(summoner.name, style: defaultStyle.copyWith(color: Theme.of(context).accentColor, fontSize: 20)),
 
-                                      return Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(summoner.name, style: defaultStyle.copyWith(color: Theme.of(context).accentColor, fontSize: 28)),
+                                    SizedBox(height: 10,),
 
-                                            SizedBox(height: 10,),
+                                    FutureBuilder<List<League>>(
+                                      future: LeagueService.getSummonersLeagues(summoner.region, summoner.id),
+                                      builder: (context, snapshot) {
+                                        final List<League> leagues = snapshot.data;
+                                        
+                                        League soloDuo;
+                                        if(leagues != null && leagues.isNotEmpty)
+                                          soloDuo = leagues.where((e) => e.queueType == Queues.solo).first;
 
-                                            Row(
-                                              children: <Widget>[
-                                                CircleAvatar(
-                                                  backgroundImage: AssetImage(LeagueAssets.summonerLeagueToAsset(soloDuo.tier)),
-                                                  backgroundColor: Colors.transparent,
-                                                  radius: 10,
-                                                ),
-                                                SizedBox(width: 5),
-                                                
-                                                Text('${soloDuo.tier ?? 'Unranked'} ${soloDuo.rank ?? ''}', style: defaultStyle.copyWith(fontSize: fontSize)),
-                                                SizedBox(width: 10,),
-                                                Text('|', style: defaultStyle.copyWith(fontSize: fontSize)),
-                                                SizedBox(width: 10,),
-                                                Text('${soloDuo.leaguePoints ?? ''} LP', style: defaultStyle.copyWith(fontSize: fontSize)),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    } else {
-                                      return Center(
-                                        child: SpinKitRing(
-                                          color: Theme.of(context).accentColor, 
-                                          size: 50,
+                                        return Container(
+                                          child: Row(
+                                            children: <Widget>[
+                                              CircleAvatar(
+                                                backgroundImage: AssetImage(LeagueAssets.summonerLeagueToAsset(soloDuo?.tier ?? 'Unranked')),
+                                                backgroundColor: Colors.transparent,
+                                                radius: 10,
+                                              ),
+                                              SizedBox(width: 5),
+                                              
+                                              Text('${soloDuo?.tier ?? 'Unranked'} ${soloDuo?.rank ?? ''}', style: defaultStyle.copyWith(fontSize: fontSize)),
+                                              SizedBox(width: 5,),
+                                              Text('${soloDuo?.leaguePoints != null ? '|' : ''}', style: defaultStyle.copyWith(fontSize: fontSize)),
+                                              SizedBox(width: 5,),
+                                              Text('${soloDuo?.leaguePoints ?? ''} ${soloDuo?.leaguePoints != null ? 'LP' : ''}', style: defaultStyle.copyWith(fontSize: fontSize)),
+                                            ],
                                           ),
-                                      );
-                                    }
-                                  }
+                                        );
+                                      }
+                                    )
+                                  ],
                                 ),
+                              ],
+                            ),
+                          ),
 
-                                FlatButton(
-                                  child: Icon(
-                                    isFavourite ? Icons.star : Icons.star_border,
-                                    color: isFavourite ? Colors.yellowAccent : Theme.of(context).accentColor,
-                                    size: fontSize * 2,
-                                  ),
-                                  onPressed: () async {
-                                    await DatabaseService.updateSummoners(favSummoner);
-                                    setState(() {});
-                                  },
-                                ),
-                              ]
-                            )
-                          ]
-                        )
+                          FavouriteButton(favSummoner: favSummoner,),
+                        ]
                       )
                     ]
                   )
-                );
-              } else {
-                return Center(
-                  child: SpinKitRing(
-                    color: Theme.of(context).accentColor, 
-                    size: 50,
-                  ),
-                );
-              }
-            } 
+                )
+              ]
+            )
           );
         } else {
           return Center(
-            child: SpinKitRing(
-              color: Theme.of(context).accentColor, 
-              size: 50,
-            ),
+            child: SizedBox(
+              height: 50,
+              width: 50,
+              child: CircularProgressIndicator()
+            )
           );
         }
+      }
+    );
+  }
+}
+
+class FavouriteButton extends StatefulWidget {
+  final FavouriteSummoner favSummoner;
+
+  FavouriteButton({this.favSummoner});
+
+  @override
+  _FavouriteButtonState createState() => _FavouriteButtonState();
+}
+
+class _FavouriteButtonState extends State<FavouriteButton> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: DatabaseService.checkIfSummonerIsFavourite(widget.favSummoner),
+      builder: (context, snapshot) {
+        final bool isFavourite = snapshot.data ?? false;
+
+        return GestureDetector(
+          onTap: () async {
+            await DatabaseService.updateSummoners(widget.favSummoner);
+            setState(() {});
+          },
+          child: Icon(
+            isFavourite ? Icons.star : Icons.star_border,
+            color: isFavourite ? Colors.yellowAccent : Theme.of(context).accentColor,
+            size: 32,
+          ),
+          
+        );
       }
     );
   }

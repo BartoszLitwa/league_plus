@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:league_plus/constants/styles.dart';
 import 'package:league_plus/screens/profile/champion_card.dart';
 import 'package:league_plus/services/league/classes.dart';
@@ -83,10 +82,7 @@ class _ProfileCardState extends State<ProfileCard> {
                                 ],
                               );
                             } else {
-                              return SpinKitRing(
-                                color: Colors.white,
-                                size: 50,
-                              );
+                              return CircularProgressIndicator(backgroundColor: Theme.of(context).accentColor);
                             }
                           }
                         )
@@ -110,10 +106,7 @@ class _ProfileCardState extends State<ProfileCard> {
           ),
         );
         } else {
-          return SpinKitRing(
-            color: Colors.white,
-            size: 50,
-          );
+          return CircularProgressIndicator(backgroundColor: Theme.of(context).accentColor);
         }
       }
     );

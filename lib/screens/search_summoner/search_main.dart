@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:league_plus/screens/search_summoner/match_list.dart';
 import 'package:league_plus/screens/search_summoner/summoner_overview.dart';
 import 'package:league_plus/screens/shared/main_scaffold.dart';
@@ -37,10 +36,7 @@ class _SearchSummonerState extends State<SearchSummoner> {
             );
          } else {
            return Center(
-             child: SpinKitRing(
-               color: Theme.of(context).accentColor, 
-               size: 50,
-              ),
+             child: CircularProgressIndicator(backgroundColor: Theme.of(context).accentColor),
            );
          }
        }

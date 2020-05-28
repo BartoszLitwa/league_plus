@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:league_plus/services/league/league_api.dart';
 import 'package:league_plus/services/league/classes.dart';
 
 class DatabaseService {
@@ -44,20 +43,9 @@ class DatabaseService {
     }
   }
 
-  static Future<List<Summoner>> favouriteSummoners() async {
+  static Future<List<FavouriteSummoner>> favouriteSummoners() async {
     try {
-      var list = _summonersFromSnapshot(await favouriteCollection.document(uid).get());
-      List<Summoner> newList = [];
-      if(list == null || list.isEmpty)
-        return newList;
-
-      for (var sum in list) {
-        var summoner = await LeagueService.getSummonerBySummonerID(sum.region, sum.summonerID);
-        summoner.region = sum.region;
-        newList.add(summoner);
-      }
-
-      return newList;
+      return  _summonersFromSnapshot(await favouriteCollection.document(uid).get());
     } catch(ex) {
       return null;
     }
