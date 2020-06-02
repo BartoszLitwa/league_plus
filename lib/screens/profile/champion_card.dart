@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:league_plus/constants/styles.dart';
+import 'package:league_plus/models/champion_card_info.dart';
 import 'package:league_plus/services/league/league_assets.dart';
 
 class ChampionCard extends StatefulWidget {
-  final double winrate; 
-  final double kdaRatio;
-  final int championIcon;
+  final ChampionCardInfo champ;
 
-  ChampionCard({this.winrate, this.kdaRatio, this.championIcon});
+  ChampionCard({this.champ});
 
   @override
   _ChampionCardState createState() => _ChampionCardState();
@@ -20,8 +19,8 @@ class _ChampionCardState extends State<ChampionCard> {
   @override
   void initState() {
     super.initState();
-    _winrateColor = widget.winrate > 70 ? Colors.green[600] : widget.winrate > 55 ? Colors.orange : widget.winrate > 35 ? Colors.grey : Colors.redAccent;
-    _kdaRatioColor = widget.kdaRatio > 4 ? Colors.green[600] : widget.kdaRatio > 2.5 ? Colors.orange : widget.kdaRatio > 1.5 ? Colors.grey : Colors.redAccent;
+    _winrateColor = widget.champ.winrate > 70 ? Colors.green[600] : widget.champ.winrate > 55 ? Colors.orange : widget.champ.winrate > 35 ? Colors.grey : Colors.redAccent;
+    _kdaRatioColor = widget.champ.kdaRatio > 4 ? Colors.green[600] : widget.champ.kdaRatio > 2.5 ? Colors.orange : widget.champ.kdaRatio > 1.5 ? Colors.grey : Colors.redAccent;
   }
 
   @override
@@ -32,15 +31,15 @@ class _ChampionCardState extends State<ChampionCard> {
         children: <Widget>[
           CircleAvatar(
             backgroundColor: Colors.transparent,
-            backgroundImage: AssetImage(LeagueAssets.getChampionIconFromChampionID(widget.championIcon)),
+            backgroundImage: AssetImage(LeagueAssets.getChampionIconFromChampionID(widget.champ.championIcon)),
           ),
 
           SizedBox(width: 5),
 
           Column(
             children: <Widget>[
-              Text('${widget.winrate}%', style: defaultStyle.copyWith(color: _winrateColor, fontSize: 14)),
-              Text('${widget.kdaRatio} KDA', style: defaultStyle.copyWith(color: _kdaRatioColor, fontSize: 12)),
+              Text('${widget.champ.winrate}%', style: defaultStyle.copyWith(color: _winrateColor, fontSize: 14)),
+              Text('${widget.champ.kdaRatio} KDA', style: defaultStyle.copyWith(color: _kdaRatioColor, fontSize: 12)),
             ],
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:league_plus/constants/styles.dart';
+import 'package:league_plus/screens/shared/loading_circle.dart';
 import 'package:league_plus/services/FireStore/database.dart';
 import 'package:league_plus/services/league/classes.dart';
 import 'package:league_plus/services/league/league_api.dart';
@@ -120,13 +121,7 @@ class _SummonerOverviewState extends State<SummonerOverview> {
             )
           );
         } else {
-          return Center(
-            child: SizedBox(
-              height: 50,
-              width: 50,
-              child: CircularProgressIndicator()
-            )
-          );
+          return LoadingRing();
         }
       }
     );

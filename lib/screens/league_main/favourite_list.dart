@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:league_plus/screens/league_main/favourite_tile.dart';
+import 'package:league_plus/screens/shared/loading_circle.dart';
 import 'package:league_plus/services/FireStore/database.dart';
 import 'package:league_plus/services/league/classes.dart';
 import 'package:league_plus/services/league/league_api.dart';
@@ -28,26 +29,17 @@ class _FavouriteSummonersListState extends State<FavouriteSummonersList> {
           future: DatabaseService.favouriteSummoners(),
           builder: (context, AsyncSnapshot<List<FavouriteSummoner>> snapshot) {
             if(snapshot.hasData) {
-              final List<FavouriteSummoner> summoners = snapshot.data;
+              final List<FavouriteSummoner> _summoners = snapshot.data;
 
               return Expanded(
                 child: SizedBox(
                   height: 30,
-                  child: FutureBuilder<List<Summoner>>(
-                    future: LeagueService.getSummonersFromFavSumList(summoners),
-                    builder: (context, snapshot) {
-                      if(!snapshot.hasData){
-                        return CircularProgressIndicator(backgroundColor: Theme.of(context).accentColor);
-                      } else {
-                        return ListView.builder(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (context, index) {
-                            return _getItem(index, snapshot.data[index]);
-                        });
-                      }
-                    }
-                  ),
+                  child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: _summoners.length,
+                    itemBuilder: (context, index) {
+                      return _getItem(index, _summoners[index]);
+                  }),
                 ),
               );
             }
@@ -59,12 +51,21 @@ class _FavouriteSummonersListState extends State<FavouriteSummonersList> {
     );
   }
 
-  Widget _getItem(int index, Summoner sum) {
+  Widget _getItem(int index, FavouriteSummoner sum) {
     if(_cache[index] != null)
       return _cache[index];
     else {
-      _cache[index] = FavourtieTile(sum: sum);
-      return _cache[index];
+      return FutureBuilder(
+        future: Future.wait([LeagueService.getSummonerBySummonerID(sum.region, sum.summonerID), LeagueService.getSummonerSoloLeague(sum.region, sum.summonerID), Future.delayed(Duration(seconds: 1))]),
+        builder: (context, snapshot) {
+          if(snapshot.hasData) {
+            _cache[index] = FavourtieTile(sum: snapshot.data[0], soloLeague: snapshot.data[1]);
+            return _cache[index];
+          } else {
+            return LoadingRing();
+          }
+        },
+      );
     }
   }
 }

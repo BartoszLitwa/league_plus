@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:league_plus/constants/styles.dart';
+import 'package:league_plus/models/match_details_info.dart';
 import 'package:league_plus/screens/search_summoner/item_icon.dart';
 import 'package:league_plus/screens/search_summoner/match_participants.dart';
 import 'package:league_plus/services/league/league_assets.dart';
@@ -17,11 +18,17 @@ class MatchTile extends StatelessWidget {
     final int playerIndex = match.participantIdentities.firstWhere((e) => e.player.summonerId == sum.summonerID).participantId - 1; // To get the index
     final ParticipantDto participant = match.participants[playerIndex];
     final ParticipantStatsDto stats = participant.stats;
-    final double kdaRatio = double.parse(((stats.kills + stats.assists) / stats.deaths).toStringAsFixed(2));
+    double kdaRatio = double.parse(((stats.kills + stats.assists) / stats.deaths).toStringAsFixed(2));
+    kdaRatio = (kdaRatio == double.nan || kdaRatio == double.negativeInfinity || kdaRatio == double.infinity) ? 'Perfect' : kdaRatio;
 
     return GestureDetector(
       onTap: () async {
-
+        Navigator.pushNamed(context, '/matchDetails', arguments: MatchDetailsInfo(
+          sum: sum,
+          match: match,
+          playerIndex: playerIndex,
+          kdaRatio: kdaRatio,
+        ));
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -31,7 +38,7 @@ class MatchTile extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(15)),
-                color: stats.win ? Colors.blue[400] : Colors.deepOrange[400],
+                color: stats.win ? Colors.blue[400] : Colors.red,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,6 +51,9 @@ class MatchTile extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
+                            Text('${match.gameMode} mode', style: defaultStyle.copyWith(fontSize: 12)),
+                            Text('${DateTime.fromMillisecondsSinceEpoch(match.gameCreation + match.gameDuration)}', style: defaultStyle.copyWith(fontSize: 12)),
+
                             CircleAvatar(
                               backgroundColor: Colors.transparent,
                               backgroundImage: AssetImage(LeagueAssets.getChampionIconFromChampionID(participant.championId)),
@@ -66,7 +76,7 @@ class MatchTile extends StatelessWidget {
 
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 CircleAvatar(
                                   backgroundImage: AssetImage(LeagueAssets.getRuneIconFromRuneID(stats.perk0)),
@@ -124,7 +134,7 @@ class MatchTile extends StatelessWidget {
                         children: <Widget>[
                           Text('${match.gameDuration ~/ 60}m ${match.gameDuration % 60}s', style: defaultStyle.copyWith(fontSize: 12),),
                           SizedBox(width: 5,),
-                          Text('${stats.totalMinionsKilled} CS', style: defaultStyle.copyWith(fontSize: 12),),
+                          Text('${stats.totalMinionsKilled} CS', style: defaultStyle.copyWith(fontSize: 12, color: Colors.green[400]),),
                         ],
                       ),
                       SizedBox(height: 2,),
@@ -137,7 +147,7 @@ class MatchTile extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 5,),
-                      Text('${kdaRatio == double.nan || kdaRatio == double.infinity ? 'Perfect' : kdaRatio} KDA', style: defaultStyle.copyWith(fontSize: 16, color: Theme.of(context).accentColor),),
+                      Text('$kdaRatio KDA', style: defaultStyle.copyWith(fontSize: 16, color: Theme.of(context).accentColor),),
                       SizedBox(height: 10,),
                       Container(
                         child: stats.largestMultiKill >= 2 ? Container(

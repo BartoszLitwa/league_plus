@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:league_plus/screens/search_summoner/match_list.dart';
 import 'package:league_plus/screens/search_summoner/summoner_overview.dart';
+import 'package:league_plus/screens/shared/loading_circle.dart';
 import 'package:league_plus/screens/shared/main_scaffold.dart';
 import 'package:league_plus/services/league/classes.dart';
 import 'package:league_plus/services/league/league_api.dart';
@@ -35,9 +36,7 @@ class _SearchSummonerState extends State<SearchSummoner> {
               ),
             );
          } else {
-           return Center(
-             child: CircularProgressIndicator(backgroundColor: Theme.of(context).accentColor),
-           );
+           return LoadingRing();
          }
        }
      )

@@ -12,11 +12,7 @@ class LeagueAssets {
 
   static String getChampionIconFromChampionID(int championID) {
     final String champ = LeagueHelper.getChampNameByID(championID);
-    String fixedChamp = champ.replaceAll(' ', '').toLowerCase();
-    fixedChamp = fixedChamp[0].toUpperCase() + fixedChamp.substring(1);
-    fixedChamp = championID == 21 ? 'MissFortune' : championID == 36 ? 'DrMundo' : championID == 59 ? 'JarvanIV' : championID == 64 ? 'LeeSin' :
-     championID == 62 ? 'MonkeyKing' : championID == 136 ? 'AurelionSol' : championID == 5 ? 'XinZhao' : championID == 11 ? 'MasterYi' :
-     championID == 4 ? 'TwistedFate' : fixedChamp;
+    String fixedChamp = champ.replaceAll(' ', '');
     return 'assets/lol_champions/$fixedChamp.png';
   }
 

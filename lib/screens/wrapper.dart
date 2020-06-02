@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:league_plus/screens/authentication/login.dart';
 import 'package:league_plus/screens/league_main/league_main.dart';
+import 'package:league_plus/screens/shared/loading_circle.dart';
 import 'package:league_plus/services/FireStore/auth.dart';
 import 'package:league_plus/services/FireStore/database.dart';
 
@@ -20,9 +21,7 @@ class _WrapperState extends State<Wrapper> {
           case ConnectionState.none:
             return Text('Not connected'); 
           case ConnectionState.waiting:
-            return Center(
-              child: CircularProgressIndicator(backgroundColor: Theme.of(context).accentColor),
-            ); 
+            return LoadingRing();
           default:
             if(snapshot.hasData && !snapshot.data.isAnonymous) {
               DatabaseService.uid = snapshot.data.uid;

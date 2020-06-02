@@ -38,8 +38,6 @@ class _LeagueMainState extends State<LeagueMain> {
               future: DatabaseService.getUserSummoner(),
               builder: (builder, snapshot) {
                 if(snapshot.hasData) {
-                  print(snapshot.data.summonerID);
-                  print(snapshot.data.region);
                   return ProfileCard( summoner: snapshot.data);
                 }
                 else {
