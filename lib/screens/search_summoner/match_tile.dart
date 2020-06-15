@@ -20,6 +20,7 @@ class MatchTile extends StatelessWidget {
     final ParticipantStatsDto stats = participant.stats;
     double kdaRatio = double.parse(((stats.kills + stats.assists) / stats.deaths).toStringAsFixed(2));
     kdaRatio = (kdaRatio == double.nan || kdaRatio == double.negativeInfinity || kdaRatio == double.infinity) ? 'Perfect' : kdaRatio;
+    final DateTime gameDate = DateTime.fromMillisecondsSinceEpoch(match.gameCreation + match.gameDuration).toLocal();
 
     return GestureDetector(
       onTap: () async {
@@ -28,6 +29,7 @@ class MatchTile extends StatelessWidget {
           match: match,
           playerIndex: playerIndex,
           kdaRatio: kdaRatio,
+          gameDate: gameDate,
         ));
       },
       child: Padding(
@@ -46,14 +48,18 @@ class MatchTile extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      // Row(
+                      //   children: <Widget>[
+                      //     Text('${match.gameType}', style: defaultStyle.copyWith(fontSize: 12)),
+                      //     Text('${gameDate}', style: defaultStyle.copyWith(fontSize: 12)),
+                      //   ],
+                      // ),
+
                       Padding(
                         padding: const EdgeInsets.only(left: 2),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text('${match.gameMode} mode', style: defaultStyle.copyWith(fontSize: 12)),
-                            Text('${DateTime.fromMillisecondsSinceEpoch(match.gameCreation + match.gameDuration)}', style: defaultStyle.copyWith(fontSize: 12)),
-
                             CircleAvatar(
                               backgroundColor: Colors.transparent,
                               backgroundImage: AssetImage(LeagueAssets.getChampionIconFromChampionID(participant.championId)),

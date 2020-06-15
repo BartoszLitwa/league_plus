@@ -1,8 +1,8 @@
 import 'package:http/http.dart' as http;
-import 'package:league_plus/services/FireStore/remote_config.dart';
 import 'dart:convert';
 import 'package:league_plus/services/league/url_routes.dart';
 import 'package:league_plus/services/league/classes.dart';
+import 'package:league_plus/services/league_plus/league_plus_web.dart';
 
 class LeagueService {
   static final http.Client _client = http.Client();
@@ -12,16 +12,16 @@ class LeagueService {
   static Future<dynamic> _getFromUrl(String url) async {
     try{
       var response = await _client.get(url, headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36",
-        "Accept-Language": "pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7",
-        "Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
-        "Origin": "https://developer.riotgames.com",
-        "X-Riot-Token": ConfigRemote.getRiotApiKey(),
+        "Authorization": "Bearer ${LeaguePlusWeb.bearerToken}",
       });
 
       if(response == null || response.statusCode != 200) {
         if(response.statusCode == 429)
           print('Rate limit exceeded!!');
+        else if(response.statusCode == 401) { // Unathorized
+          await LeaguePlusWeb.authenticate();
+          return await _getFromUrl(url);
+        } 
         else 
           print('Error while fetching data ${response.statusCode}');
         return null;
@@ -128,43 +128,18 @@ class LeagueService {
   }
 
   static Future<String> updateCurrentLeagueVersion() async {
-    var response = await _client.get('https://ddragon.leagueoflegends.com/api/versions.json');
+    var response = await _getFromUrl('https://leagueplusapi.azurewebsites.net/api/lol/version');
 
     if(response == null || response.statusCode != 200) {
-      print(response.statusCode);
-      return '';
+      return '10.12.1';
     }
 
-    List<String> versions = (jsonDecode(response.body) as List<dynamic>).cast<String>();
-    _currentVersion = versions.first;
-    print(_currentVersion);
-
-    return versions.first;
+    return response.body;
   }
   
   static String getSummonerIcon(int id) {
-    return 'http://ddragon.leagueoflegends.com/cdn/${_currentVersion ?? '10.10.3216176'}/img/profileicon/$id.png';
+    return 'http://ddragon.leagueoflegends.com/cdn/${_currentVersion ?? '10.12.1'}/img/profileicon/$id.png';
   }
-
-  // static String _getChampionIconFromChampionID(int championID) {
-  //   final String champ = LeagueHelper.getChampNameByID(championID);
-  //   String fixedChamp = champ.replaceAll(' ', '').toLowerCase();
-  //   fixedChamp = fixedChamp[0].toUpperCase() + fixedChamp.substring(1);
-  //   fixedChamp = championID == 21 ? 'MissFortune' : championID == 36 ? 'DrMundo' : championID == 59 ? 'JarvanIV' : championID == 64 ? 'LeeSin' :
-  //    championID == 62 ? 'MonkeyKing' : championID == 136 ? 'AurelionSol' : championID == 5 ? 'XinZhao' : championID == 11 ? 'MasterYi' :
-  //    championID == 4 ? 'TwistedFate' : fixedChamp;
-  //   return 'http://ddragon.leagueoflegends.com/cdn/${_currentVersion ?? '10.10.3216176'}/img/champion/$fixedChamp.png';
-  // }
-
-  // static String _getSummonerSpellIconFromSpellID(int spellID) {
-  //   final String icon = LeagueHelper.getSummonerSpellNameByID(spellID);
-  //   final String fixedIcon = spellID == 14 ? 'Dot' : spellID == 6 ? 'Haste' : spellID == 1 ? 'SummonerBoost' : spellID == 2 ? 'SummonerMana' : icon;
-  //   return 'http://ddragon.leagueoflegends.com/cdn/${_currentVersion ?? '10.10.3216176'}/img/spell/Summoner$fixedIcon.png';
-  // }
-
-  // static String _getSummonerItemIconFromID(int id) {
-  //   return 'http://ddragon.leagueoflegends.com/cdn/${_currentVersion ?? '10.10.3216176'}/img/item/$id.png';
-  // }
 }
 
 class Regions {

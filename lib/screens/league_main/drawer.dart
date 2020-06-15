@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:league_plus/constants/styles.dart';
 import 'package:league_plus/services/FireStore/auth.dart';
 import 'package:league_plus/services/FireStore/database.dart';
-import 'package:league_plus/services/FireStore/remote_config.dart';
 import 'package:league_plus/services/league/league_api.dart';
 import 'package:league_plus/services/league/classes.dart';
 
@@ -79,7 +78,6 @@ class _MainDrawerState extends State<MainDrawer> {
               leading: Icon(Icons.help, color: Theme.of(context).accentColor),
               title: Text('test', style: defaultStyle),
               onTap: () async {
-                ConfigRemote.getRiotApiKey();
               },
             ),
           ],

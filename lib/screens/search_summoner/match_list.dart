@@ -61,7 +61,7 @@ class _MatchListState extends State<MatchList> {
                 Expanded(
                   child: ListView.builder(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: 5,
+                    itemCount: match.matches.length,
                     itemBuilder: (context, index) {
                       return _getItem(index, match.matches[index]);
                     }

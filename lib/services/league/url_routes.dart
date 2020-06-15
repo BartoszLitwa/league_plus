@@ -12,7 +12,8 @@ class Regions {
   static final String tr = 'tr1';
 
   static String getApiUrl(String reg) {
-    return 'https://$reg.api.riotgames.com';
+    //return 'https://$reg.api.riotgames.com';
+    return 'https://leagueplusapi.azurewebsites.net/api/$reg';
   }
 }
 

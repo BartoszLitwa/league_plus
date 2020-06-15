@@ -11,9 +11,8 @@ class LeagueAssets {
   }
 
   static String getChampionIconFromChampionID(int championID) {
-    final String champ = LeagueHelper.getChampNameByID(championID);
-    String fixedChamp = champ.replaceAll(' ', '');
-    return 'assets/lol_champions/$fixedChamp.png';
+    final String champ = LeagueHelper.getChampNameByID(championID).replaceAll(' ', '');
+    return 'assets/lol_champions/$champ.png';
   }
 
   static String getSummonerSpellIconFromSpellID(int spellID) {
